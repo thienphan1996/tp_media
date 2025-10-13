@@ -85,7 +85,7 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
     //   onOkButton: () {},
     // );
     // ToastUtils.failed('hihihi');
-    // PremiumManager().presentPaywall('Premium');
+    PremiumManager().presentPaywall('Premium');
   }
 
   @override
