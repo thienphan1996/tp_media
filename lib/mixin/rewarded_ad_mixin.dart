@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin RewardedAdMixin<T extends StatefulWidget> on LoadingDialogState<T> {
+mixin RewardedAdMixin<T extends StatefulWidget> on State<T> {
   RewardedAd? _rewardedAd;
+  bool _isLoadingAd = false;
 
   abstract String rewardedUnitId;
 
@@ -11,7 +12,8 @@ mixin RewardedAdMixin<T extends StatefulWidget> on LoadingDialogState<T> {
     _rewardedAd?.dispose();
     _rewardedAd = null;
 
-    showLoading();
+    _isLoadingAd = true;
+    showLoadingDialog(context);
 
     RewardedAd.load(
       adUnitId: rewardedUnitId,
@@ -23,17 +25,25 @@ mixin RewardedAdMixin<T extends StatefulWidget> on LoadingDialogState<T> {
           // Keep a reference to the ad so you can show it later.
           _rewardedAd = ad;
 
-          hideLoading();
+          hideLoadingDialog();
           showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
         },
         onAdFailedToLoad: (LoadAdError error) {
           // Called when an ad request failed.
           debugPrint('Ad failed to load with error: $error');
-          hideLoading();
+
+          hideLoadingDialog();
           onDismiss?.call();
         },
       ),
     );
+  }
+
+  void hideLoadingDialog() {
+    if (_isLoadingAd) {
+      _isLoadingAd = false;
+      Navigator.pop(context);
+    }
   }
 
   void showRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {

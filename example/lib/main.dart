@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:example/iap/test_iap_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tp_media/tp_media.dart';
@@ -10,7 +11,7 @@ void main() async {
 
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
+      statusBarColor: Colors.white,
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark,
@@ -18,7 +19,8 @@ void main() async {
     ),
   );
 
-  await IapInitializer.init('test_EnWFkUuxBGEPZuJqCwnjCvVxfHI', 'appl_wWfNUKEQdfXNCXBpbZFJLtpTTrI');
+  await IapInitializer.init(androidApiKey: 'test_ISWQvtVjQVYMyJrPXVqZFabZTaT', iosApiKey: '');
+  await IapInitializer.initIapManagers([TestIapManager.instance]);
 
   runApp(const MyApp());
 }
@@ -32,11 +34,20 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late OpenAdLifecycleReactor _appLifecycleReactor;
-  late OpenAdManager _appOpenAdManager;
+  late AdmobOpenAd _appOpenAdManager;
+
+  Widget trackingTransparencyDialog(BuildContext context) {
+    return buildTrackingTransparencyDialog(
+      context,
+      title: 'Test title',
+      message: 'Message example',
+      continueButton: 'Continue',
+    );
+  }
 
   String get openAdUnitId {
     if (Platform.isAndroid) {
-      return 'ca-app-pub-3940256099942544/9257395921';
+      return kTestAndroidOpenAdId;
     }
     return '';
   }
@@ -44,9 +55,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await AdsManager.init(context);
+      await AdmobInitializer.init(context, trackingTransparencyDialog(context));
 
-      _appOpenAdManager = OpenAdManager(openAdUnitId);
+      _appOpenAdManager = AdmobOpenAd(openAdUnitId);
       _appLifecycleReactor = OpenAdLifecycleReactor(appOpenAdManager: _appOpenAdManager);
       _appLifecycleReactor.listenToAppStateChanges();
       _appOpenAdManager.loadAd();
@@ -76,62 +87,49 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialAdMixin, RewardedAdMixin {
   void _incrementCounter() {
-    // showAlertDialog(
-    //   context,
-    //   title: 'Thien Test',
-    //   message: 'Hello xin chao cac ban',
-    //   okText: 'OK',
-    //   cancelText: 'CANCEL',
-    //   onOkButton: () {},
-    // );
-    // ToastUtils.failed('hihihi');
-    PremiumManager().presentPaywall('Premium');
+    TestIapManager.instance.presentPaywallIfNeeded();
   }
 
   @override
-  String interstitialUnitId = 'ca-app-pub-3940256099942544/1033173712';
+  String interstitialUnitId = kTestAndroidInterstitialId;
 
   @override
-  String rewardedUnitId = 'ca-app-pub-3940256099942544/5224354917';
-
-  @override
-  void initState() {
-    AppBannerAd.isTestMode = false;
-    super.initState();
-  }
+  String rewardedUnitId = kTestAndroidRewardedAdId;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
-      body: TopRoundedContainer(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              AppBannerAd('ca-app-pub-3940256099942544/9214589741'),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CommonCard(child: CommonEmpty(emptyMessage: 'Test message')),
-                    SizedBox(height: 16),
-                    CommonTextButton(text: 'Test', onPressed: () {}),
-                    SizedBox(height: 16),
-                    CommonTextField(labelText: 'Hihi haha'),
-                    SizedBox(height: 16),
-                    CommonIconButton(icon: Icons.add_circle_outlined, onPressed: () {}),
-                  ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
+        body: TopRoundedContainer(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                AdmobBannerAd(kTestAndroidBannerId),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CommonCard(child: CommonEmpty(emptyMessage: 'Test message')),
+                      SizedBox(height: 16),
+                      CommonTextButton(text: 'Test', onPressed: () {}),
+                      SizedBox(height: 16),
+                      CommonTextField(labelText: 'Testing field'),
+                      SizedBox(height: 16),
+                      CommonIconButton(icon: Icons.add_circle_outlined, onPressed: () {}),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _incrementCounter,
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

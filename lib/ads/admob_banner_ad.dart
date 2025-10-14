@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class AppBannerAd extends StatefulWidget {
-  const AppBannerAd(this.unitId, {super.key});
+class AdmobBannerAd extends StatefulWidget {
+  const AdmobBannerAd(this.unitId, {super.key});
 
   final String unitId;
 
   static var isTestMode = false;
 
   @override
-  State<AppBannerAd> createState() => _AppBannerAdState();
+  State<AdmobBannerAd> createState() => _AdmobBannerAdState();
 }
 
-class _AppBannerAdState extends State<AppBannerAd> {
+class _AdmobBannerAdState extends State<AdmobBannerAd> {
   BannerAd? _anchoredAdaptiveAd;
   bool _isLoaded = false;
   late Orientation _currentOrientation;
@@ -74,7 +74,7 @@ class _AppBannerAdState extends State<AppBannerAd> {
             width: _anchoredAdaptiveAd!.size.width.toDouble(),
             height: _anchoredAdaptiveAd!.size.height.toDouble(),
             child:
-                !AppBannerAd.isTestMode
+                !AdmobBannerAd.isTestMode
                     ? AdWidget(ad: _anchoredAdaptiveAd!)
                     : Image.asset(
                       'assets/tp_media_banner.png',

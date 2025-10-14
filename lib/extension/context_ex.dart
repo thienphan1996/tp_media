@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 extension ContextEx on BuildContext {
-  bool isTablet() {
+  bool get isTablet {
     return MediaQuery.of(this).size.shortestSide > 600;
   }
 

@@ -11,7 +11,7 @@ extension DoubleEx on double {
     return ((this * mod).round().toDouble() / mod);
   }
 
-  String orZeroString() {
+  String get orZeroString {
     if (this == 0.0) {
       return '0';
     }

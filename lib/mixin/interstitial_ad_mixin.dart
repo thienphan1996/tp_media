@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin InterstitialAdMixin<T extends StatefulWidget> on LoadingDialogState<T> {
+mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
   InterstitialAd? _interstitialAd;
   bool _isLoadingAd = false;
 
@@ -35,25 +35,30 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on LoadingDialogState<T> {
 
     if (!_isLoadingAd && _interstitialAd == null) {
       _isLoadingAd = true;
-      showLoading();
+      showLoadingDialog(context);
       InterstitialAd.load(
         adUnitId: interstitialUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             _interstitialAd = ad;
-            _isLoadingAd = false;
-            hideLoading();
+            hideLoadingDialog();
             showAd(onDismissAd: onDismissAd);
           },
           onAdFailedToLoad: (LoadAdError error) {
-            _isLoadingAd = false;
             onDismissAd?.call();
-            hideLoading();
+            hideLoadingDialog();
             loadAd();
           },
         ),
       );
+    }
+  }
+
+  void hideLoadingDialog() {
+    if (_isLoadingAd) {
+      _isLoadingAd = false;
+      Navigator.pop(context);
     }
   }
 

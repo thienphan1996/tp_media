@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class OpenAdLifecycleReactor {
-  final OpenAdManager appOpenAdManager;
+  final AdmobOpenAd appOpenAdManager;
 
   OpenAdLifecycleReactor({required this.appOpenAdManager});
 
@@ -22,8 +22,8 @@ class OpenAdLifecycleReactor {
 }
 
 /// Utility class that manages loading and showing app open ads.
-class OpenAdManager {
-  OpenAdManager(this.adUnitId);
+class AdmobOpenAd {
+  AdmobOpenAd(this.adUnitId);
 
   final String adUnitId;
 
