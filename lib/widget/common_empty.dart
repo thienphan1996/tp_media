@@ -21,7 +21,7 @@ class CommonEmpty extends StatelessWidget {
               child: Lottie.asset('assets/ani_empty.json', package: 'tp_media', fit: BoxFit.cover),
             ),
             const SizedBox(height: 16),
-            Text(emptyMessage, style: TextStyle(fontSize: 14.0, color: Colors.black54)),
+            Text(emptyMessage, style: TextStyle(fontSize: 14.0, color: Theme.of(context).hintColor)),
           ],
         ),
       ),

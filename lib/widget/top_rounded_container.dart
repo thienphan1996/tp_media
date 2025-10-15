@@ -21,7 +21,7 @@ class TopRoundedContainer extends StatelessWidget {
       height: double.maxFinite,
       child: ClipRRect(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(radius), topRight: Radius.circular(radius)),
-        child: Container(color: backgroundColor ?? Colors.white, child: child),
+        child: Container(color: backgroundColor ?? Theme.of(context).colorScheme.surface, child: child),
       ),
     );
   }

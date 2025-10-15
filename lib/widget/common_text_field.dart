@@ -35,6 +35,14 @@ class _CommonTextFieldState extends State<CommonTextField> {
   TextEditingController? _editingController = TextEditingController();
   final FocusNode _focus = FocusNode();
 
+  Color get hintColor {
+    return Theme.of(context).hintColor;
+  }
+
+  Color get textColor {
+    return Theme.of(context).colorScheme.onSurface;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,20 +86,11 @@ class _CommonTextFieldState extends State<CommonTextField> {
                 maxLength: widget.maxLength,
                 keyboardType: widget.textInputType,
                 inputFormatters: widget.inputFormatter,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 18.0,
-                  decorationThickness: 0,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(color: textColor, fontSize: 18.0, decorationThickness: 0, fontWeight: FontWeight.w600),
                 decoration: InputDecoration(
                   labelText: widget.labelText,
-                  labelStyle: const TextStyle(color: Colors.black54, fontSize: 16.0, fontWeight: FontWeight.normal),
-                  floatingLabelStyle: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.normal,
-                  ),
+                  labelStyle: TextStyle(color: hintColor, fontSize: 16.0, fontWeight: FontWeight.normal),
+                  floatingLabelStyle: TextStyle(color: hintColor, fontSize: 18.0, fontWeight: FontWeight.normal),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.fromLTRB(12.0, 12, 4.0, 12),
                   counterText: "",
@@ -121,9 +120,9 @@ class _CommonTextFieldState extends State<CommonTextField> {
                           widget.onChanged?.call("");
                         },
                         customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.clear_circled_solid, color: Colors.black54),
+                          child: Icon(CupertinoIcons.clear_circled_solid, color: hintColor),
                         ),
                       ),
                     ),

@@ -16,7 +16,7 @@ class CommonCard extends StatelessWidget {
       ),
       elevation: elevation,
       margin: const EdgeInsets.all(0.0),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       child: ClipRRect(borderRadius: radius ?? BorderRadius.circular(8), child: child),
     );
   }

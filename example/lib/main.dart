@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:example/iap/test_iap_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tp_media/tp_media.dart';
 import 'package:tp_media/widget/top_rounded_container.dart';
 
@@ -22,7 +23,7 @@ void main() async {
   await IapInitializer.init(androidApiKey: 'test_ISWQvtVjQVYMyJrPXVqZFabZTaT', iosApiKey: '');
   await IapInitializer.initIapManagers([TestIapManager.instance]);
 
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
