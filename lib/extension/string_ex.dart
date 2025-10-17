@@ -30,4 +30,8 @@ extension StringEx on String {
 
 extension NullableStringEx on String? {
   String get orEmpty => this != null ? this! : '';
+
+  bool get isNullOrEmpty => this == null || this!.isEmpty;
+
+  String ifIsNullOrEmpty(String fallback) => isNullOrEmpty ? fallback : this!;
 }
