@@ -51,6 +51,8 @@ dependencies:
 
   json_annotation: ^4.9.0
 
+  google_fonts: ^6.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

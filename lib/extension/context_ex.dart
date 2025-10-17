@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
 extension ContextEx on BuildContext {
-  bool get isTablet {
-    return MediaQuery.of(this).size.shortestSide > 600;
-  }
+  bool get isTablet => MediaQuery.of(this).size.shortestSide > 600;
+
+  ColorScheme get colors => Theme.of(this).colorScheme;
+
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
+  ThemeData get theme => Theme.of(this);
 
   Future<dynamic> pushSlideBottomUp(Widget anotherPage) {
     return Navigator.of(this).push(
