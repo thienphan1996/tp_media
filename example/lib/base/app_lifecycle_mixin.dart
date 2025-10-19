@@ -32,7 +32,12 @@ class _AppLifecycleObserver with WidgetsBindingObserver {
   final VoidCallback? onResumed;
   final VoidCallback? onPaused;
 
-  _AppLifecycleObserver({this.onForeground, this.onBackground, this.onResumed, this.onPaused});
+  _AppLifecycleObserver({
+    this.onForeground,
+    this.onBackground,
+    this.onResumed,
+    this.onPaused,
+  });
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {

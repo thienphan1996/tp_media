@@ -8,7 +8,10 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> {
 
   abstract String rewardedUnitId;
 
-  void loadAndShowRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {
+  void loadAndShowRewardAd({
+    Function(RewardItem)? onRewarded,
+    VoidCallback? onDismiss,
+  }) {
     _rewardedAd?.dispose();
     _rewardedAd = null;
 
@@ -46,7 +49,10 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void showRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {
+  void showRewardAd({
+    Function(RewardItem)? onRewarded,
+    VoidCallback? onDismiss,
+  }) {
     if (_rewardedAd != null) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, err) {

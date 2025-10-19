@@ -20,7 +20,10 @@ void main() async {
     ),
   );
 
-  await IapInitializer.init(androidApiKey: 'test_ISWQvtVjQVYMyJrPXVqZFabZTaT', iosApiKey: '');
+  await IapInitializer.init(
+    androidApiKey: 'test_ISWQvtVjQVYMyJrPXVqZFabZTaT',
+    iosApiKey: '',
+  );
   await IapInitializer.initIapManagers([TestIapManager.instance]);
 
   runApp(ProviderScope(child: const MyApp()));
@@ -59,7 +62,9 @@ class _MyAppState extends State<MyApp> {
       await AdmobInitializer.init(context, trackingTransparencyDialog(context));
 
       _appOpenAdManager = AdmobOpenAd(openAdUnitId);
-      _appLifecycleReactor = OpenAdLifecycleReactor(appOpenAdManager: _appOpenAdManager);
+      _appLifecycleReactor = OpenAdLifecycleReactor(
+        appOpenAdManager: _appOpenAdManager,
+      );
       _appLifecycleReactor.listenToAppStateChanges();
       _appOpenAdManager.loadAd();
     });
@@ -71,7 +76,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -86,7 +93,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialAdMixin, RewardedAdMixin {
+class _MyHomePageState extends LoadingDialogState<MyHomePage>
+    with InterstitialAdMixin, RewardedAdMixin {
   void _incrementCounter() {
     TestIapManager.instance.presentPaywallIfNeeded();
   }
@@ -101,7 +109,10 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+        ),
         body: TopRoundedContainer(
           child: SingleChildScrollView(
             child: Column(
@@ -112,13 +123,18 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CommonCard(child: CommonEmpty(emptyMessage: 'Test message')),
+                      CommonCard(
+                        child: CommonEmpty(emptyMessage: 'Test message'),
+                      ),
                       SizedBox(height: 16),
                       CommonTextButton(text: 'Test', onPressed: () {}),
                       SizedBox(height: 16),
                       CommonTextField(labelText: 'Testing field'),
                       SizedBox(height: 16),
-                      CommonIconButton(icon: Icons.add_circle_outlined, onPressed: () {}),
+                      CommonIconButton(
+                        icon: Icons.add_circle_outlined,
+                        onPressed: () {},
+                      ),
                     ],
                   ),
                 ),

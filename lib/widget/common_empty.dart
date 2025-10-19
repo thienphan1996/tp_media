@@ -18,10 +18,20 @@ class CommonEmpty extends StatelessWidget {
             SizedBox(
               width: 120,
               height: 100,
-              child: Lottie.asset('assets/ani_empty.json', package: 'tp_media', fit: BoxFit.cover),
+              child: Lottie.asset(
+                'assets/ani_empty.json',
+                package: 'tp_media',
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(height: 16),
-            Text(emptyMessage, style: TextStyle(fontSize: 14.0, color: Theme.of(context).hintColor)),
+            Text(
+              emptyMessage,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
           ],
         ),
       ),

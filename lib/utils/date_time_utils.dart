@@ -1,15 +1,15 @@
 import 'package:intl/intl.dart';
 
-class DateTimeUtils {
-  static const String DATE_TIME_DISPLAY_FORMAT = "HH:mm dd/MM/yyyy";
+const String kDateDisplayFormat = "HH:mm dd/MM/yyyy";
 
+class DateTimeUtils {
   static String get nowDisplay {
-    return DateFormat(DATE_TIME_DISPLAY_FORMAT).format(DateTime.now());
+    return DateFormat(kDateDisplayFormat).format(DateTime.now());
   }
 
   static String toStringDisplay(DateTime dateTime) {
     try {
-      return DateFormat(DateTimeUtils.DATE_TIME_DISPLAY_FORMAT).format(dateTime);
+      return DateFormat(kDateDisplayFormat).format(dateTime);
     } catch (e) {
       return '';
     }

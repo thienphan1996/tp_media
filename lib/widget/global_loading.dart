@@ -11,7 +11,11 @@ class Global {
           (context) => SizedBox(
             width: 48,
             height: 48,
-            child: Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor)),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
     );
     Overlay.of(context).insert(overlayEntry!);

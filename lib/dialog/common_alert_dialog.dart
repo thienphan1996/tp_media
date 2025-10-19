@@ -43,25 +43,48 @@ class CommonAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
-      title: Text(title, style: TextStyle(fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.bold)),
-      content: Text(message, style: TextStyle(fontSize: 16, color: Colors.black87)),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontSize: 20.0,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text(
+        message,
+        style: TextStyle(fontSize: 16, color: Colors.black87),
+      ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          style: ButtonStyle(overlayColor: WidgetStateProperty.all(Colors.transparent)),
+          style: ButtonStyle(
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+          ),
           child: Text(
             cancelText,
-            style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.normal),
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.normal,
+            ),
           ),
         ),
         TextButton(
           onPressed: () async {
             onOkButton();
           },
-          style: ButtonStyle(overlayColor: WidgetStateProperty.all(Colors.transparent)),
-          child: Text(okText, style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
+          style: ButtonStyle(
+            overlayColor: WidgetStateProperty.all(Colors.transparent),
+          ),
+          child: Text(
+            okText,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );

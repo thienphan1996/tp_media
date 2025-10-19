@@ -16,7 +16,11 @@ void showLoadingDialog(BuildContext context, {Color? color}) {
             child: SizedBox(
               width: 48,
               height: 48,
-              child: Center(child: CircularProgressIndicator(color: color ?? Theme.of(context).primaryColor)),
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: color ?? Theme.of(context).primaryColor,
+                ),
+              ),
             ),
           ),
         ),

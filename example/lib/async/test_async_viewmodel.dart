@@ -5,7 +5,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'test_async_viewmodel.g.dart';
 
 @Riverpod()
-class TestAsyncViewModel extends _$TestAsyncViewModel with AsyncViewModel<HomeState> {
+class TestAsyncViewModel extends _$TestAsyncViewModel
+    with AsyncViewModel<HomeState> {
   @override
   Future<HomeState> build() async {
     state = AsyncData(HomeState());

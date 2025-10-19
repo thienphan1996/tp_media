@@ -5,14 +5,21 @@ class MaterialInkWell extends StatelessWidget {
   final Widget child;
   final double radius;
 
-  const MaterialInkWell({super.key, required this.onTap, required this.child, this.radius = 0});
+  const MaterialInkWell({
+    super.key,
+    required this.onTap,
+    required this.child,
+    this.radius = 0,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
         onTap: onTap,
         child: child,
       ),

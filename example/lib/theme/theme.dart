@@ -120,7 +120,10 @@ class MaterialTheme {
     useMaterial3: true,
     brightness: colorScheme.brightness,
     colorScheme: colorScheme,
-    textTheme: textTheme.apply(bodyColor: colorScheme.onSurface, displayColor: colorScheme.onSurface),
+    textTheme: textTheme.apply(
+      bodyColor: colorScheme.onSurface,
+      displayColor: colorScheme.onSurface,
+    ),
     scaffoldBackgroundColor: colorScheme.surface,
     canvasColor: colorScheme.surface,
   );
@@ -165,7 +168,11 @@ class ColorFamily {
 
 final appTheme = ThemeData(
   useMaterial3: true,
-  appBarTheme: AppBarTheme(backgroundColor: Colors.transparent, foregroundColor: Colors.white, centerTitle: true),
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.transparent,
+    foregroundColor: Colors.white,
+    centerTitle: true,
+  ),
   scaffoldBackgroundColor: Colors.white,
   colorScheme: MaterialTheme.lightScheme(),
   // elevatedButtonTheme: ElevatedButtonThemeData(
@@ -193,15 +200,42 @@ final appTheme = ThemeData(
   //   ),
   // ),
   textTheme: TextTheme(
-    displayLarge: GoogleFonts.varelaRound(fontSize: 72, fontWeight: FontWeight.bold),
-    displayMedium: GoogleFonts.varelaRound(fontSize: 56, fontWeight: FontWeight.bold),
-    displaySmall: GoogleFonts.varelaRound(fontSize: 40, fontWeight: FontWeight.bold),
-    headlineLarge: GoogleFonts.varelaRound(fontSize: 32, fontWeight: FontWeight.w600),
-    headlineMedium: GoogleFonts.varelaRound(fontSize: 28, fontWeight: FontWeight.w600),
-    headlineSmall: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.w600),
-    titleLarge: GoogleFonts.varelaRound(fontSize: 24, fontWeight: FontWeight.bold),
-    titleMedium: GoogleFonts.varelaRound(fontSize: 20, fontWeight: FontWeight.bold),
-    titleSmall: GoogleFonts.varelaRound(fontSize: 16, fontWeight: FontWeight.bold),
+    displayLarge: GoogleFonts.varelaRound(
+      fontSize: 72,
+      fontWeight: FontWeight.bold,
+    ),
+    displayMedium: GoogleFonts.varelaRound(
+      fontSize: 56,
+      fontWeight: FontWeight.bold,
+    ),
+    displaySmall: GoogleFonts.varelaRound(
+      fontSize: 40,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineLarge: GoogleFonts.varelaRound(
+      fontSize: 32,
+      fontWeight: FontWeight.w600,
+    ),
+    headlineMedium: GoogleFonts.varelaRound(
+      fontSize: 28,
+      fontWeight: FontWeight.w600,
+    ),
+    headlineSmall: GoogleFonts.varelaRound(
+      fontSize: 24,
+      fontWeight: FontWeight.w600,
+    ),
+    titleLarge: GoogleFonts.varelaRound(
+      fontSize: 24,
+      fontWeight: FontWeight.bold,
+    ),
+    titleMedium: GoogleFonts.varelaRound(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
+    titleSmall: GoogleFonts.varelaRound(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+    ),
     bodyLarge: GoogleFonts.roboto(fontSize: 18),
     bodyMedium: GoogleFonts.roboto(fontSize: 14),
     bodySmall: GoogleFonts.roboto(fontSize: 12),

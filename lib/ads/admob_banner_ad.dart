@@ -34,9 +34,10 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
       _isLoaded = false;
     });
 
-    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-      screenWidth,
-    );
+    final AnchoredAdaptiveBannerAdSize? size =
+        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+          screenWidth,
+        );
 
     if (size == null) {
       return;
@@ -68,7 +69,9 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
   Widget _getAdWidget() {
     return OrientationBuilder(
       builder: (context, orientation) {
-        if (_currentOrientation == orientation && _anchoredAdaptiveAd != null && _isLoaded) {
+        if (_currentOrientation == orientation &&
+            _anchoredAdaptiveAd != null &&
+            _isLoaded) {
           return Container(
             color: Colors.white,
             width: _anchoredAdaptiveAd!.size.width.toDouble(),

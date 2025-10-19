@@ -6,6 +6,10 @@ extension ScrollControllerEx on ScrollController {
       return;
     }
 
-    animateTo(position.maxScrollExtent, duration: Duration(milliseconds: durationMilli), curve: Curves.ease);
+    animateTo(
+      position.maxScrollExtent,
+      duration: Duration(milliseconds: durationMilli),
+      curve: Curves.ease,
+    );
   }
 }

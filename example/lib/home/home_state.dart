@@ -7,5 +7,6 @@ part 'home_state.g.dart';
 abstract class HomeState with _$HomeState {
   const factory HomeState({@Default(0) int counter}) = _HomeState;
 
-  factory HomeState.fromJson(Map<String, dynamic> json) => _$HomeStateFromJson(json);
+  factory HomeState.fromJson(Map<String, dynamic> json) =>
+      _$HomeStateFromJson(json);
 }

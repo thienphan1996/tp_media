@@ -26,15 +26,24 @@ class CommonTextButton extends StatelessWidget {
         onPressed: isEnable ? onPressed : null,
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all(
-            isEnable ? (backgroundColor ?? Theme.of(context).primaryColor) : Theme.of(context).disabledColor,
+            isEnable
+                ? (backgroundColor ?? Theme.of(context).primaryColor)
+                : Theme.of(context).disabledColor,
           ),
-          shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: radius ?? BorderRadius.circular(8))),
+          shape: WidgetStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: radius ?? BorderRadius.circular(8),
+            ),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Text(
             text,
-            style: TextStyle(color: textColor ?? Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: textColor ?? Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

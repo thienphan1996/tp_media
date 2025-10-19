@@ -39,19 +39,27 @@ extension ContextEx on BuildContext {
   }
 
   void showSuccessSnackBar(String text, {SnackBarAction? action}) {
-    ScaffoldMessenger.of(this).showSnackBar(CommonSnackBar.success(context: this, text: text, action: action));
+    ScaffoldMessenger.of(this).showSnackBar(
+      CommonSnackBar.success(context: this, text: text, action: action),
+    );
   }
 
   void showInfoSnackBar(String text, {SnackBarAction? action}) {
-    ScaffoldMessenger.of(this).showSnackBar(CommonSnackBar.info(context: this, text: text, action: action));
+    ScaffoldMessenger.of(this).showSnackBar(
+      CommonSnackBar.info(context: this, text: text, action: action),
+    );
   }
 
   void showWarningSnackBar(String text, {SnackBarAction? action}) {
-    ScaffoldMessenger.of(this).showSnackBar(CommonSnackBar.warning(context: this, text: text, action: action));
+    ScaffoldMessenger.of(this).showSnackBar(
+      CommonSnackBar.warning(context: this, text: text, action: action),
+    );
   }
 
   void showErrorSnackBar(String text, {SnackBarAction? action}) {
-    ScaffoldMessenger.of(this).showSnackBar(CommonSnackBar.error(context: this, text: text, action: action));
+    ScaffoldMessenger.of(this).showSnackBar(
+      CommonSnackBar.error(context: this, text: text, action: action),
+    );
   }
 
   Future<dynamic> pushSlideBottomUp(Widget anotherPage) {
@@ -63,9 +71,15 @@ extension ContextEx on BuildContext {
           const end = Offset.zero;
           const curve = Curves.ease;
 
-          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var tween = Tween(
+            begin: begin,
+            end: end,
+          ).chain(CurveTween(curve: curve));
 
-          return SlideTransition(position: animation.drive(tween), child: child);
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
         },
       ),
     );

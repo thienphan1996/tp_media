@@ -86,11 +86,24 @@ class _CommonTextFieldState extends State<CommonTextField> {
                 maxLength: widget.maxLength,
                 keyboardType: widget.textInputType,
                 inputFormatters: widget.inputFormatter,
-                style: TextStyle(color: textColor, fontSize: 18.0, decorationThickness: 0, fontWeight: FontWeight.w600),
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 18.0,
+                  decorationThickness: 0,
+                  fontWeight: FontWeight.w600,
+                ),
                 decoration: InputDecoration(
                   labelText: widget.labelText,
-                  labelStyle: TextStyle(color: hintColor, fontSize: 16.0, fontWeight: FontWeight.normal),
-                  floatingLabelStyle: TextStyle(color: hintColor, fontSize: 18.0, fontWeight: FontWeight.normal),
+                  labelStyle: TextStyle(
+                    color: hintColor,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  floatingLabelStyle: TextStyle(
+                    color: hintColor,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.normal,
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.fromLTRB(12.0, 12, 4.0, 12),
                   counterText: "",
@@ -108,21 +121,32 @@ class _CommonTextFieldState extends State<CommonTextField> {
               child:
                   widget.suffixChild ??
                   Visibility(
-                    visible: _visibleSuffix && _focus.hasFocus && _editingController?.text.isNotEmpty == true,
+                    visible:
+                        _visibleSuffix &&
+                        _focus.hasFocus &&
+                        _editingController?.text.isNotEmpty == true,
                     child: Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: () {
                           _editingController?.text = "";
-                          _editingController?.selection = TextSelection.fromPosition(
-                            TextPosition(offset: _editingController?.text.length ?? 0),
+                          _editingController
+                              ?.selection = TextSelection.fromPosition(
+                            TextPosition(
+                              offset: _editingController?.text.length ?? 0,
+                            ),
                           );
                           widget.onChanged?.call("");
                         },
-                        customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+                        customBorder: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         child: Padding(
                           padding: EdgeInsets.all(8.0),
-                          child: Icon(CupertinoIcons.clear_circled_solid, color: hintColor),
+                          child: Icon(
+                            CupertinoIcons.clear_circled_solid,
+                            color: hintColor,
+                          ),
                         ),
                       ),
                     ),
