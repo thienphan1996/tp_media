@@ -21,6 +21,10 @@ abstract class IapManager {
 
   Future<CustomerInfo> get iapCustomerInfo => Purchases.getCustomerInfo();
 
+  void addCustomerInfoUpdateListener(CustomerInfoUpdateListener customerInfoUpdateListener) {
+    Purchases.addCustomerInfoUpdateListener(customerInfoUpdateListener);
+  }
+
   Future<CustomerInfo> init({CustomerInfo? customerInfo}) async {
     final storedValue = await _secureStorage.read(key: _keyIapManager);
 

@@ -1,16 +1,33 @@
 # example
 
-A new Flutter project.
+A Flutter plugin and example app for working with media (audio/video/images) across Android and iOS. This repository contains native Android code (Kotlin/Java), Flutter/Dart plugin code, Gradle build scripts, and an example Flutter app.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Cross-platform media utilities for Flutter
+- Android implementation in Kotlin/Java
+- Example Flutter app demonstrating usage
+- Built with Gradle and Flutter tooling
 
-A few resources to get you started if this is your first Flutter project:
+## Getting started
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Install Flutter: https://docs.flutter.dev/get-started/install
+2. From the repository root, get dependencies:
+   ```bash
+   flutter pub get# tp_media
+   
+   A Flutter plugin and example app for working with media (audio/video/images) across Android and iOS. This repository contains native Android code (Kotlin/Java), Flutter/Dart plugin code, Gradle build scripts, and an example Flutter app.
+   
+   ## Features
+   
+   - Cross-platform media utilities for Flutter
+   - Android implementation in Kotlin/Java
+   - Example Flutter app demonstrating usage
+   - Built with Gradle and Flutter tooling
+   
+   ## Getting started
+   
+   1. Install Flutter: https://docs.flutter.dev/get-started/install
+   2. From the repository root, get dependencies:
+      ```bash
+      flutter pub get
