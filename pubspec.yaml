@@ -21,7 +21,7 @@ dependencies:
   purchases_ui_flutter: ^9.8.0
   flutter_secure_storage: ^9.2.4
 
-  lottie: ^3.3.2
+  lottie: ^3.3.0
 
   fluttertoast: ^9.0.0
 
