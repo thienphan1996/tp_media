@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
 mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
@@ -8,7 +9,11 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
 
   abstract String interstitialUnitId;
 
-  void loadAd() {
+  void loadAd() async {
+    if (await InternetManager.instance.isOnline == false) {
+      return;
+    }
+
     if (!_isLoadingAd && _interstitialAd == null) {
       _isLoadingAd = true;
       InterstitialAd.load(
@@ -27,13 +32,18 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void loadAndShowAd({VoidCallback? onDismissAd}) {
+  void loadAndShowAd({VoidCallback? onDismissAd}) async {
+    if (await InternetManager.instance.isOnline == false) {
+      onDismissAd?.call();
+      return;
+    }
+
     if (!_isLoadingAd && _interstitialAd != null) {
       showAd(onDismissAd: onDismissAd);
       return;
     }
 
-    if (!_isLoadingAd && _interstitialAd == null) {
+    if (!_isLoadingAd && _interstitialAd == null && mounted) {
       _isLoadingAd = true;
       showLoadingDialog(context);
       InterstitialAd.load(
@@ -63,6 +73,10 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
   }
 
   void showAd({VoidCallback? onDismissAd}) {
+    if (_isLoadingAd) {
+      return;
+    }
+
     if (_interstitialAd != null) {
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (InterstitialAd ad) {

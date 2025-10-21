@@ -11,6 +11,7 @@ export 'package:tp_media/iap/iap_initializer.dart';
 export 'package:tp_media/iap/iap_manager.dart';
 export 'package:tp_media/mixin/interstitial_ad_mixin.dart';
 export 'package:tp_media/mixin/rewarded_ad_mixin.dart';
+export 'package:tp_media/network/internet_manager.dart';
 export 'package:tp_media/state/loading_dialog_state.dart';
 export 'package:tp_media/utils/date_time_utils.dart';
 export 'package:tp_media/utils/toast_utils.dart';

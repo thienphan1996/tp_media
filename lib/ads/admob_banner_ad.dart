@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:tp_media/network/internet_manager.dart';
 
 class AdmobBannerAd extends StatefulWidget {
   const AdmobBannerAd(this.unitId, {super.key});
@@ -26,6 +27,14 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
 
   /// Load another ad, disposing of the current ad if there is one.
   Future<void> _loadAd() async {
+    if (await InternetManager.instance.isOnline == false) {
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
     final screenWidth = MediaQuery.of(context).size.width.truncate();
     _anchoredAdaptiveAd?.dispose();
 
@@ -34,10 +43,9 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
       _isLoaded = false;
     });
 
-    final AnchoredAdaptiveBannerAdSize? size =
-        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-          screenWidth,
-        );
+    final AnchoredAdaptiveBannerAdSize? size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+      screenWidth,
+    );
 
     if (size == null) {
       return;
@@ -69,9 +77,7 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
   Widget _getAdWidget() {
     return OrientationBuilder(
       builder: (context, orientation) {
-        if (_currentOrientation == orientation &&
-            _anchoredAdaptiveAd != null &&
-            _isLoaded) {
+        if (_currentOrientation == orientation && _anchoredAdaptiveAd != null && _isLoaded) {
           return Container(
             color: Colors.white,
             width: _anchoredAdaptiveAd!.size.width.toDouble(),

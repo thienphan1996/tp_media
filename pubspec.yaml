@@ -1,6 +1,6 @@
 name: tp_media
 description: "Flutter common package by TP MEDIA. Support Admob to show ads, RevenueCat to show Paywall and handle In app purchase."
-version: 0.0.5
+version: 0.0.6
 homepage: https://github.com/thienphan1996/tp_media.git
 
 environment:
@@ -23,6 +23,8 @@ dependencies:
   lottie: ^3.3.2
 
   fluttertoast: ^9.0.0
+
+  internet_connection_checker_plus: ^2.9.0
 
 dev_dependencies:
   flutter_test:

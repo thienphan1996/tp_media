@@ -7,8 +7,7 @@ import 'package:tp_media/ads/tracking_transparency_dialog.dart';
 
 const kTestAndroidBannerId = "ca-app-pub-3940256099942544/6300978111";
 const kTestAndroidInterstitialId = "ca-app-pub-3940256099942544/1033173712";
-const kTestAndroidInterstitialVideoId =
-    "ca-app-pub-3940256099942544/8691691433";
+const kTestAndroidInterstitialVideoId = "ca-app-pub-3940256099942544/8691691433";
 const kTestAndroidOpenAdId = "ca-app-pub-3940256099942544/9257395921";
 const kTestAndroidRewardedAdId = "ca-app-pub-3940256099942544/5224354917";
 const kTestAndroidNativeAdId = "ca-app-pub-3940256099942544/1044960115";
@@ -30,9 +29,7 @@ class AdmobInitializer {
     List<String>? testDeviceIds,
   }) async {
     if (Platform.isIOS) {
-      final isNotDetermined =
-          await AppTrackingTransparency.trackingAuthorizationStatus ==
-          TrackingStatus.notDetermined;
+      final isNotDetermined = await AppTrackingTransparency.trackingAuthorizationStatus == TrackingStatus.notDetermined;
 
       if (isNotDetermined && context.mounted) {
         await showTrackingTransparencyDialog(context, dialogContent);
@@ -43,9 +40,7 @@ class AdmobInitializer {
       }
     }
 
-    MobileAds.instance.updateRequestConfiguration(
-      RequestConfiguration(testDeviceIds: testDeviceIds),
-    );
+    MobileAds.instance.updateRequestConfiguration(RequestConfiguration(testDeviceIds: testDeviceIds));
 
     return MobileAds.instance.initialize();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:tp_media/network/internet_manager.dart';
 
 class OpenAdLifecycleReactor {
   final AdmobOpenAd appOpenAdManager;
@@ -8,9 +9,7 @@ class OpenAdLifecycleReactor {
 
   void listenToAppStateChanges() {
     AppStateEventNotifier.startListening();
-    AppStateEventNotifier.appStateStream.forEach(
-      (state) => _onAppStateChanged(state),
-    );
+    AppStateEventNotifier.appStateStream.forEach((state) => _onAppStateChanged(state));
   }
 
   void _onAppStateChanged(AppState appState) {
@@ -39,12 +38,20 @@ class AdmobOpenAd {
 
   bool _isShowingAd = false;
 
+  bool _isLoadingAd = false;
+
   bool get isAdAvailable {
     return _appOpenAd != null;
   }
 
   /// Load an AppOpenAd.
-  void loadAd() {
+  void loadAd() async {
+    if (await InternetManager.instance.isOnline == false) {
+      return;
+    }
+
+    _isLoadingAd = true;
+
     AppOpenAd.load(
       adUnitId: adUnitId,
       request: AdRequest(),
@@ -53,9 +60,11 @@ class AdmobOpenAd {
           debugPrint('$ad loaded');
           _appOpenLoadTime = DateTime.now();
           _appOpenAd = ad;
+          _isLoadingAd = false;
         },
         onAdFailedToLoad: (error) {
           debugPrint('AppOpenAd failed to load: $error');
+          _isLoadingAd = false;
         },
       ),
     );
@@ -66,6 +75,10 @@ class AdmobOpenAd {
   /// If the previously cached ad has expired, this just loads and caches a
   /// new ad.
   void showAdIfAvailable({VoidCallback? onDismiss}) {
+    if (_isLoadingAd) {
+      debugPrint('Tried to show ad while loading.');
+      return;
+    }
     if (!isAdAvailable) {
       debugPrint('Tried to show ad before available.');
       loadAd();

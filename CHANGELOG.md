@@ -15,3 +15,6 @@
 ## 0.0.5
 
 * Update logic cache In-app purchase
+## 0.0.6
+
+* Add logic check internet connection before load ad

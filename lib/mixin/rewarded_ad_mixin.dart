@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
 mixin RewardedAdMixin<T extends StatefulWidget> on State<T> {
@@ -8,14 +9,20 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> {
 
   abstract String rewardedUnitId;
 
-  void loadAndShowRewardAd({
-    Function(RewardItem)? onRewarded,
-    VoidCallback? onDismiss,
-  }) {
+  void loadAndShowRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) async {
+    if (await InternetManager.instance.isOnline == false) {
+      onDismiss?.call();
+      return;
+    }
+
+    if (!mounted) {
+      return;
+    }
+
     _rewardedAd?.dispose();
     _rewardedAd = null;
-
     _isLoadingAd = true;
+
     showLoadingDialog(context);
 
     RewardedAd.load(
@@ -49,10 +56,11 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> {
     }
   }
 
-  void showRewardAd({
-    Function(RewardItem)? onRewarded,
-    VoidCallback? onDismiss,
-  }) {
+  void showRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {
+    if (_isLoadingAd) {
+      return;
+    }
+
     if (_rewardedAd != null) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, err) {
