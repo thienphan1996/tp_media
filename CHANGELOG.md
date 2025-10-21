@@ -12,3 +12,6 @@
 * Add extensions, common widgets.
 * Add theme
 * Add Context extensions
+## 0.0.4
+
+* Update logic cache In-app purchase

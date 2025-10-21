@@ -4,7 +4,7 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:tp_media/iap/iap_manager.dart';
 
 class IapInitializer {
-  static Future<void> init({String? androidApiKey, String? iosApiKey}) async {
+  static Future<bool> init(List<IapManager> iapManagers, {String? androidApiKey, String? iosApiKey}) async {
     Purchases.setLogLevel(LogLevel.debug);
 
     PurchasesConfiguration configuration;
@@ -17,16 +17,26 @@ class IapInitializer {
     }
 
     await Purchases.configure(configuration);
+
+    return _initIapManagers(iapManagers);
   }
 
-  static Future<void> initIapManagers(List<IapManager> iapManagers) async {
+  static Future<bool> _initIapManagers(List<IapManager> iapManagers) async {
+    var isSubscribed = false;
+
     if (iapManagers.isEmpty) {
-      return;
+      return false;
     }
 
     final customerInfo = await iapManagers.first.init();
+    isSubscribed = iapManagers.first.isSubscribed;
+
     for (var i = 1; i < iapManagers.length; i++) {
       await iapManagers[i].init(customerInfo: customerInfo);
+
+      isSubscribed = isSubscribed && iapManagers[i].isSubscribed;
     }
+
+    return isSubscribed;
   }
 }

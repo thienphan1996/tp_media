@@ -20,12 +20,6 @@ void main() async {
     ),
   );
 
-  await IapInitializer.init(
-    androidApiKey: 'test_ISWQvtVjQVYMyJrPXVqZFabZTaT',
-    iosApiKey: '',
-  );
-  await IapInitializer.initIapManagers([TestIapManager.instance]);
-
   runApp(ProviderScope(child: const MyApp()));
 }
 
@@ -37,6 +31,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialAdMixin, RewardedAdMixin {
   late OpenAdLifecycleReactor _appLifecycleReactor;
   late AdmobOpenAd _appOpenAdManager;
 
@@ -56,45 +70,28 @@ class _MyAppState extends State<MyApp> {
     return '';
   }
 
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await AdmobInitializer.init(context, trackingTransparencyDialog(context));
-
-      _appOpenAdManager = AdmobOpenAd(openAdUnitId);
-      _appLifecycleReactor = OpenAdLifecycleReactor(
-        appOpenAdManager: _appOpenAdManager,
-      );
-      _appLifecycleReactor.listenToAppStateChanges();
-      _appOpenAdManager.loadAd();
-    });
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+  Future<void> _initApp() async {
+    final isIapSubscribed = await IapInitializer.init(
+      [TestIapManager.instance],
+      androidApiKey: 'test_ISWQvtVjQVYMyJrPXVqZFabZTaT',
+      iosApiKey: '',
     );
+
+    if (!isIapSubscribed) {
+      await _initAdmob();
+    }
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  Future<void> _initAdmob() async {
+    AdmobBannerAd.isTestMode = true;
+    await AdmobInitializer.init(context, trackingTransparencyDialog(context));
 
-  final String title;
+    _appOpenAdManager = AdmobOpenAd(openAdUnitId);
+    _appOpenAdManager.loadAd();
+    _appLifecycleReactor = OpenAdLifecycleReactor(appOpenAdManager: _appOpenAdManager);
+    _appLifecycleReactor.listenToAppStateChanges();
+  }
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends LoadingDialogState<MyHomePage>
-    with InterstitialAdMixin, RewardedAdMixin {
   void _incrementCounter() {
     TestIapManager.instance.presentPaywallIfNeeded();
   }
@@ -107,47 +104,45 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-        ),
-        body: TopRoundedContainer(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                AdmobBannerAd(kTestAndroidBannerId),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CommonCard(
-                        child: CommonEmpty(emptyMessage: 'Test message'),
+    return FutureBuilder(
+      future: _initApp(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        return SafeArea(
+          child: Scaffold(
+            appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
+            body: TopRoundedContainer(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    AdmobBannerAd(kTestAndroidBannerId),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CommonCard(child: CommonEmpty(emptyMessage: 'Test message')),
+                          SizedBox(height: 16),
+                          CommonTextButton(text: 'Test', onPressed: () {}),
+                          SizedBox(height: 16),
+                          CommonTextField(labelText: 'Testing field'),
+                          SizedBox(height: 16),
+                          CommonIconButton(icon: Icons.add_circle_outlined, onPressed: () {}),
+                        ],
                       ),
-                      SizedBox(height: 16),
-                      CommonTextButton(text: 'Test', onPressed: () {}),
-                      SizedBox(height: 16),
-                      CommonTextField(labelText: 'Testing field'),
-                      SizedBox(height: 16),
-                      CommonIconButton(
-                        icon: Icons.add_circle_outlined,
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
+                    ),
+                    AdmobBannerAd(kTestAndroidBannerId),
+                  ],
                 ),
-              ],
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: _incrementCounter,
+              tooltip: 'Increment',
+              child: const Icon(Icons.add),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _incrementCounter,
-          tooltip: 'Increment',
-          child: const Icon(Icons.add),
-        ),
-      ),
+        );
+      },
     );
   }
 }
