@@ -18,6 +18,6 @@
 ## 0.0.6
 
 * Add logic check internet connection before load ad
-## 0.0.6
+## 0.0.7
 
 * Add internet checker widget
