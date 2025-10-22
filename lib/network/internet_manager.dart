@@ -8,4 +8,6 @@ class InternetManager {
   static InternetManager get instance => _instance;
 
   Future<bool> get isOnline => InternetConnection().hasInternetAccess;
+
+  Stream<InternetStatus> get onStatusChange => InternetConnection().onStatusChange;
 }

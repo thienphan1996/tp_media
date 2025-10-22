@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class CommonEmpty extends StatelessWidget {
-  const CommonEmpty({required this.emptyMessage, super.key});
+  const CommonEmpty({super.key, required this.emptyMessage});
 
   final String emptyMessage;
 
@@ -18,20 +18,10 @@ class CommonEmpty extends StatelessWidget {
             SizedBox(
               width: 120,
               height: 100,
-              child: Lottie.asset(
-                'assets/ani_empty.json',
-                package: 'tp_media',
-                fit: BoxFit.cover,
-              ),
+              child: Lottie.asset('assets/ani_empty.json', package: 'tp_media', fit: BoxFit.cover),
             ),
             const SizedBox(height: 16),
-            Text(
-              emptyMessage,
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Theme.of(context).hintColor,
-              ),
-            ),
+            Text(emptyMessage, style: TextStyle(fontSize: 14.0, color: Theme.of(context).hintColor)),
           ],
         ),
       ),

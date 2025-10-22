@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tp_media/tp_media.dart';
+import 'package:tp_media/widget/internet_checker.dart';
 import 'package:tp_media/widget/top_rounded_container.dart';
 
 void main() async {
@@ -131,6 +132,7 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                       ),
                     ),
                     AdmobBannerAd(kTestAndroidBannerId),
+                    InternetChecker(message: 'No internet connection.', child: Text('Has internet!')),
                   ],
                 ),
               ),

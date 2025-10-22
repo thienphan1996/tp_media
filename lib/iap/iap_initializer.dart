@@ -34,7 +34,7 @@ class IapInitializer {
     for (var i = 1; i < iapManagers.length; i++) {
       await iapManagers[i].init(customerInfo: customerInfo);
 
-      isSubscribed = isSubscribed && iapManagers[i].isSubscribed;
+      isSubscribed = isSubscribed || iapManagers[i].isSubscribed;
     }
 
     return isSubscribed;
