@@ -71,6 +71,9 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
     return '';
   }
 
+  @override
+  bool get isEnableAd => !TestIapManager.instance.isSubscribed;
+
   Future<void> _initApp() async {
     final isIapSubscribed = await IapInitializer.init(
       [TestIapManager.instance],
@@ -84,10 +87,9 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
   }
 
   Future<void> _initAdmob() async {
-    AdmobBannerAd.isTestMode = true;
     await AdmobInitializer.init(context, trackingTransparencyDialog(context));
 
-    _appOpenAdManager = AdmobOpenAd(openAdUnitId);
+    _appOpenAdManager = AdmobOpenAd(openAdUnitId, isEnableAd: () => !TestIapManager.instance.isSubscribed);
     _appOpenAdManager.loadAd();
     _appLifecycleReactor = OpenAdLifecycleReactor(appOpenAdManager: _appOpenAdManager);
     _appLifecycleReactor.listenToAppStateChanges();
@@ -115,7 +117,7 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    AdmobBannerAd(kTestAndroidBannerId),
+                    AdmobBannerAd(kTestAndroidBannerId, isEnableAd: !TestIapManager.instance.isSubscribed),
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -131,7 +133,7 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                         ],
                       ),
                     ),
-                    AdmobBannerAd(kTestAndroidBannerId),
+                    AdmobBannerAd(kTestAndroidBannerId, isEnableAd: !TestIapManager.instance.isSubscribed),
                     InternetChecker(message: 'No internet connection.', child: Text('Has internet!')),
                   ],
                 ),

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:tp_media/ads/admob_enable.dart';
 import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
+mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
   InterstitialAd? _interstitialAd;
   bool _isLoadingAd = false;
 
   abstract String interstitialUnitId;
 
   void loadAd() async {
-    if (await InternetManager.instance.isOnline == false) {
+    if (!isEnableAd || await InternetManager.instance.isOnline == false) {
       return;
     }
 
@@ -33,7 +34,7 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
   }
 
   void loadAndShowAd({VoidCallback? onDismissAd}) async {
-    if (await InternetManager.instance.isOnline == false) {
+    if (!isEnableAd || await InternetManager.instance.isOnline == false) {
       onDismissAd?.call();
       return;
     }
@@ -73,7 +74,7 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> {
   }
 
   void showAd({VoidCallback? onDismissAd}) {
-    if (_isLoadingAd) {
+    if (!isEnableAd || _isLoadingAd) {
       return;
     }
 

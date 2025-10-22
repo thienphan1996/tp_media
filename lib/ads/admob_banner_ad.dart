@@ -3,9 +3,10 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tp_media/network/internet_manager.dart';
 
 class AdmobBannerAd extends StatefulWidget {
-  const AdmobBannerAd(this.unitId, {super.key});
+  const AdmobBannerAd(this.unitId, {this.isEnableAd = true, super.key});
 
   final String unitId;
+  final bool isEnableAd;
 
   static var isTestMode = false;
 
@@ -27,7 +28,7 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
 
   /// Load another ad, disposing of the current ad if there is one.
   Future<void> _loadAd() async {
-    if (await InternetManager.instance.isOnline == false) {
+    if (!widget.isEnableAd || await InternetManager.instance.isOnline == false) {
       return;
     }
 
@@ -75,6 +76,10 @@ class _AdmobBannerAdState extends State<AdmobBannerAd> {
   /// Returns an empty container if no ad is loaded, or the orientation
   /// has changed. Also loads a new ad if the orientation changes.
   Widget _getAdWidget() {
+    if (!widget.isEnableAd) {
+      return SizedBox.shrink();
+    }
+
     return OrientationBuilder(
       builder: (context, orientation) {
         if (_currentOrientation == orientation && _anchoredAdaptiveAd != null && _isLoaded) {

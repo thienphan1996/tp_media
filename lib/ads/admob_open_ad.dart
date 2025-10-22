@@ -24,9 +24,11 @@ class OpenAdLifecycleReactor {
 
 /// Utility class that manages loading and showing app open ads.
 class AdmobOpenAd {
-  AdmobOpenAd(this.adUnitId);
+  AdmobOpenAd(this.adUnitId, {this.isEnableAd});
 
   final String adUnitId;
+
+  final bool Function()? isEnableAd;
 
   /// Maximum duration allowed between loading and showing the ad.
   final Duration maxCacheDuration = Duration(hours: 4);
@@ -44,9 +46,13 @@ class AdmobOpenAd {
     return _appOpenAd != null;
   }
 
+  bool get _isEnableAd {
+    return isEnableAd?.call() ?? true;
+  }
+
   /// Load an AppOpenAd.
   void loadAd() async {
-    if (await InternetManager.instance.isOnline == false) {
+    if (!_isEnableAd || await InternetManager.instance.isOnline == false) {
       return;
     }
 
@@ -75,8 +81,7 @@ class AdmobOpenAd {
   /// If the previously cached ad has expired, this just loads and caches a
   /// new ad.
   void showAdIfAvailable({VoidCallback? onDismiss}) {
-    if (_isLoadingAd) {
-      debugPrint('Tried to show ad while loading.');
+    if (!_isEnableAd || _isLoadingAd) {
       return;
     }
     if (!isAdAvailable) {
