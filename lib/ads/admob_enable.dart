@@ -1,3 +1,3 @@
-abstract class AdmobEnable {
-  bool get isEnableAd;
+class AdmobEnable {
+  bool get isEnableAd => true;
 }

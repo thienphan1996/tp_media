@@ -18,7 +18,7 @@ class InternetChecker extends StatefulWidget {
 class _InternetCheckerState extends State<InternetChecker> {
   late StreamSubscription<InternetStatus> _subscription;
 
-  var _internetStatus = InternetStatus.disconnected;
+  var _internetStatus = InternetStatus.connected;
 
   @override
   void initState() {

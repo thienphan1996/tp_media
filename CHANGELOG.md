@@ -21,3 +21,7 @@
 ## 0.0.7
 
 * Add internet checker widget
+
+## 0.0.8
+
+* Add premium user widget

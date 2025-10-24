@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tp_media/tp_media.dart';
 import 'package:tp_media/widget/internet_checker.dart';
+import 'package:tp_media/widget/premium_user.dart';
 import 'package:tp_media/widget/top_rounded_container.dart';
 
 void main() async {
@@ -130,6 +131,14 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                           CommonTextField(labelText: 'Testing field'),
                           SizedBox(height: 16),
                           CommonIconButton(icon: Icons.add_circle_outlined, onPressed: () {}),
+                          SizedBox(height: 16),
+                          CommonCard(
+                            child: PremiumUser(
+                              text: 'Hello Premium User',
+                              title: 'Have a good day',
+                              isPremiumUser: TestIapManager.instance.isSubscribed,
+                            ),
+                          ),
                         ],
                       ),
                     ),
