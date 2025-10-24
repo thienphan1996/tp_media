@@ -14,7 +14,9 @@ abstract class IapManager {
 
   Future<CustomerInfo> get customerInfo => Purchases.getCustomerInfo();
 
-  void addCustomerInfoUpdateListener(CustomerInfoUpdateListener customerInfoUpdateListener) {
+  void addCustomerInfoUpdateListener(
+    CustomerInfoUpdateListener customerInfoUpdateListener,
+  ) {
     Purchases.addCustomerInfoUpdateListener(customerInfoUpdateListener);
   }
 
@@ -29,7 +31,10 @@ abstract class IapManager {
     return info;
   }
 
-  Future<bool> presentPaywallIfNeeded({Offering? offering, bool displayCloseButton = false}) async {
+  Future<bool> presentPaywallIfNeeded({
+    Offering? offering,
+    bool displayCloseButton = false,
+  }) async {
     if (isSubscribed) {
       return Future.value(true);
     }
@@ -40,20 +45,28 @@ abstract class IapManager {
       displayCloseButton: displayCloseButton,
     );
 
-    if (paywallResult == PaywallResult.purchased || paywallResult == PaywallResult.restored) {
+    if (paywallResult == PaywallResult.purchased ||
+        paywallResult == PaywallResult.restored) {
       return refreshFromRevenueCat();
     }
 
     return Future.value(isSubscribed);
   }
 
-  Future<bool> presentPaywall({Offering? offering, bool displayCloseButton = false}) async {
+  Future<bool> presentPaywall({
+    Offering? offering,
+    bool displayCloseButton = false,
+  }) async {
     if (isSubscribed) {
       return Future.value(true);
     }
 
-    final paywallResult = await RevenueCatUI.presentPaywall(offering: offering, displayCloseButton: displayCloseButton);
-    if (paywallResult == PaywallResult.purchased || paywallResult == PaywallResult.restored) {
+    final paywallResult = await RevenueCatUI.presentPaywall(
+      offering: offering,
+      displayCloseButton: displayCloseButton,
+    );
+    if (paywallResult == PaywallResult.purchased ||
+        paywallResult == PaywallResult.restored) {
       return refreshFromRevenueCat();
     }
 
@@ -68,8 +81,12 @@ abstract class IapManager {
     }
   }
 
-  Future<bool> _updateState(String entitlementId, CustomerInfo customerInfo) async {
-    final active = customerInfo.entitlements.all[entitlementId]?.isActive ?? false;
+  Future<bool> _updateState(
+    String entitlementId,
+    CustomerInfo customerInfo,
+  ) async {
+    final active =
+        customerInfo.entitlements.all[entitlementId]?.isActive ?? false;
     if (active != isSubscribed) {
       isSubscribed = active;
       _controller.add(active);

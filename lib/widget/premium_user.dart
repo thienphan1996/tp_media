@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tp_media/external/lottie.dart';
 
 class PremiumUser extends StatelessWidget {
-  const PremiumUser({required this.text, required this.title, required this.isPremiumUser, super.key});
+  const PremiumUser({
+    required this.text,
+    required this.title,
+    required this.isPremiumUser,
+    super.key,
+  });
 
   final String title;
   final String text;
@@ -22,18 +27,37 @@ class PremiumUser extends StatelessWidget {
         children: [
           SizedBox(
             width: 46,
-            child: Lottie.asset('assets/ani_premium.json', package: 'tp_media', fit: BoxFit.cover, repeat: false),
+            child: Lottie.asset(
+              'assets/ani_premium.json',
+              package: 'tp_media',
+              fit: BoxFit.cover,
+              repeat: false,
+            ),
           ),
           const SizedBox(width: 8),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
               Visibility(
                 visible: text.trim().isNotEmpty,
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 14)),
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: Text(
+                    text,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
               ),
             ],

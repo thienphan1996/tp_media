@@ -6,7 +6,11 @@ import 'package:lottie/lottie.dart';
 import 'package:tp_media/network/internet_manager.dart';
 
 class InternetChecker extends StatefulWidget {
-  const InternetChecker({super.key, required this.message, required this.child});
+  const InternetChecker({
+    super.key,
+    required this.message,
+    required this.child,
+  });
 
   final String message;
   final Widget child;
@@ -52,10 +56,20 @@ class _InternetCheckerState extends State<InternetChecker> {
             SizedBox(
               width: 120,
               height: 100,
-              child: Lottie.asset('assets/ani_no_internet.json', package: 'tp_media', fit: BoxFit.cover),
+              child: Lottie.asset(
+                'assets/ani_no_internet.json',
+                package: 'tp_media',
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(height: 16),
-            Text(widget.message, style: TextStyle(fontSize: 14.0, color: Theme.of(context).hintColor)),
+            Text(
+              widget.message,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: Theme.of(context).hintColor,
+              ),
+            ),
           ],
         ),
       ),

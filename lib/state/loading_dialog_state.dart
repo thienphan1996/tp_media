@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showLoadingDialog(BuildContext context, {Color? color}) {
+void showDialogLoading(BuildContext context, {Color? color}) {
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -34,7 +34,7 @@ abstract class LoadingDialogState<T extends StatefulWidget> extends State<T> {
 
   void showLoading() {
     isLoading = true;
-    showLoadingDialog(context);
+    showDialogLoading(context);
   }
 
   void hideLoading() {

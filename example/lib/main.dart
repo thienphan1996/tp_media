@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tp_media/tp_media.dart';
-import 'package:tp_media/widget/internet_checker.dart';
-import 'package:tp_media/widget/premium_user.dart';
-import 'package:tp_media/widget/top_rounded_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,7 +94,7 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
   }
 
   void _incrementCounter() {
-    TestIapManager.instance.presentPaywallIfNeeded();
+    loadAndShowRewardAd();
   }
 
   @override
@@ -129,8 +126,6 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                           CommonTextButton(text: 'Test', onPressed: () {}),
                           SizedBox(height: 16),
                           CommonTextField(labelText: 'Testing field'),
-                          SizedBox(height: 16),
-                          CommonIconButton(icon: Icons.add_circle_outlined, onPressed: () {}),
                           SizedBox(height: 16),
                           CommonCard(
                             child: PremiumUser(

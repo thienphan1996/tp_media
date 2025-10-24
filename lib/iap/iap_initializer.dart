@@ -4,7 +4,11 @@ import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:tp_media/iap/iap_manager.dart';
 
 class IapInitializer {
-  static Future<bool> init(List<IapManager> iapManagers, {String? androidApiKey, String? iosApiKey}) async {
+  static Future<bool> init(
+    List<IapManager> iapManagers, {
+    String? androidApiKey,
+    String? iosApiKey,
+  }) async {
     Purchases.setLogLevel(LogLevel.debug);
 
     PurchasesConfiguration configuration;

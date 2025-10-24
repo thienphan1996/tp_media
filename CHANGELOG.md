@@ -25,3 +25,8 @@
 ## 0.0.8
 
 * Add premium user widget
+
+## 1.0.0
+
+* Add in-app review checker
+* Stable version

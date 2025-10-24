@@ -9,5 +9,6 @@ class InternetManager {
 
   Future<bool> get isOnline => InternetConnection().hasInternetAccess;
 
-  Stream<InternetStatus> get onStatusChange => InternetConnection().onStatusChange;
+  Stream<InternetStatus> get onStatusChange =>
+      InternetConnection().onStatusChange;
 }

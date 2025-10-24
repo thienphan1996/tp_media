@@ -4,13 +4,17 @@ import 'package:tp_media/ads/admob_enable.dart';
 import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin RewardedAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
+mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
+    implements AdmobEnable {
   RewardedAd? _rewardedAd;
   bool _isLoadingAd = false;
 
   abstract String rewardedUnitId;
 
-  void loadAndShowRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) async {
+  void loadAndShowRewardAd({
+    Function(RewardItem)? onRewarded,
+    VoidCallback? onDismiss,
+  }) async {
     if (!isEnableAd || await InternetManager.instance.isOnline == false) {
       onDismiss?.call();
       return;
@@ -24,7 +28,7 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnab
     _rewardedAd = null;
     _isLoadingAd = true;
 
-    showLoadingDialog(context);
+    showDialogLoading(context);
 
     RewardedAd.load(
       adUnitId: rewardedUnitId,
@@ -36,28 +40,31 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnab
           // Keep a reference to the ad so you can show it later.
           _rewardedAd = ad;
 
-          hideLoadingDialog();
+          hideDialogLoading();
           showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
         },
         onAdFailedToLoad: (LoadAdError error) {
           // Called when an ad request failed.
           debugPrint('Ad failed to load with error: $error');
 
-          hideLoadingDialog();
+          hideDialogLoading();
           onDismiss?.call();
         },
       ),
     );
   }
 
-  void hideLoadingDialog() {
+  void hideDialogLoading() {
     if (_isLoadingAd) {
       _isLoadingAd = false;
       Navigator.pop(context);
     }
   }
 
-  void showRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {
+  void showRewardAd({
+    Function(RewardItem)? onRewarded,
+    VoidCallback? onDismiss,
+  }) {
     if (!isEnableAd || _isLoadingAd) {
       return;
     }
