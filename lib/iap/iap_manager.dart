@@ -15,18 +15,18 @@ abstract class IapManager {
 
   Future<CustomerInfo> get customerInfo => Purchases.getCustomerInfo();
 
-  void addCustomerInfoUpdateListener(
+  Future<void> addCustomerInfoUpdateListener(
     CustomerInfoUpdateListener customerInfoUpdateListener,
-  ) {
-    Purchases.addCustomerInfoUpdateListener(customerInfoUpdateListener);
+  ) async {
+    if (await InternetManager.instance.isOnline) {
+      Purchases.addCustomerInfoUpdateListener(customerInfoUpdateListener);
+    }
   }
 
   Future<CustomerInfo?> init({CustomerInfo? customerInfo}) async {
-    if (await InternetManager.instance.isOnline) {
-      Purchases.addCustomerInfoUpdateListener((customerInfo) {
-        _updateState(entitlementId, customerInfo);
-      });
-    }
+    addCustomerInfoUpdateListener((customerInfo) {
+      _updateState(entitlementId, customerInfo);
+    });
 
     try {
       final info = customerInfo ?? await this.customerInfo;
@@ -42,7 +42,11 @@ abstract class IapManager {
     bool displayCloseButton = false,
   }) async {
     if (isSubscribed) {
-      return Future.value(true);
+      return true;
+    }
+
+    if (await InternetManager.instance.isOnline == false) {
+      return isSubscribed;
     }
 
     final paywallResult = await RevenueCatUI.presentPaywallIfNeeded(
@@ -56,7 +60,7 @@ abstract class IapManager {
       return refreshFromRevenueCat();
     }
 
-    return Future.value(isSubscribed);
+    return isSubscribed;
   }
 
   Future<bool> presentPaywall({
@@ -64,7 +68,11 @@ abstract class IapManager {
     bool displayCloseButton = false,
   }) async {
     if (isSubscribed) {
-      return Future.value(true);
+      return true;
+    }
+
+    if (await InternetManager.instance.isOnline == false) {
+      return isSubscribed;
     }
 
     final paywallResult = await RevenueCatUI.presentPaywall(
@@ -76,7 +84,7 @@ abstract class IapManager {
       return refreshFromRevenueCat();
     }
 
-    return Future.value(isSubscribed);
+    return isSubscribed;
   }
 
   Future<bool> refreshFromRevenueCat() async {

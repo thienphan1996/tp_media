@@ -34,3 +34,7 @@
 ## 1.0.1
 
 * Update logic init iap managers
+
+## 1.0.2
+
+* Fix show paywall when no internet
