@@ -30,3 +30,7 @@
 
 * Add in-app review checker
 * Stable version
+
+## 1.0.1
+
+* Update logic init iap managers

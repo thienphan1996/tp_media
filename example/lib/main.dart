@@ -52,6 +52,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialAdMixin, RewardedAdMixin {
   late OpenAdLifecycleReactor _appLifecycleReactor;
   late AdmobOpenAd _appOpenAdManager;
+  var _adReady = false;
+  late final Future initFuture;
 
   Widget trackingTransparencyDialog(BuildContext context) {
     return buildTrackingTransparencyDialog(
@@ -72,6 +74,12 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
   @override
   bool get isEnableAd => !TestIapManager.instance.isSubscribed;
 
+  @override
+  void initState() {
+    initFuture = _initApp();
+    super.initState();
+  }
+
   Future<void> _initApp() async {
     final isIapSubscribed = await IapInitializer.init(
       [TestIapManager.instance],
@@ -82,6 +90,10 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
     if (!isIapSubscribed) {
       await _initAdmob();
     }
+
+    setState(() {
+      _adReady = true;
+    });
   }
 
   Future<void> _initAdmob() async {
@@ -106,8 +118,26 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _initApp(),
+      future: initFuture,
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (!_adReady) {
+          return Container(
+            color: Colors.white,
+            child: Dialog(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: SizedBox(
+                  width: 48,
+                  height: 48,
+                  child: Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor)),
+                ),
+              ),
+            ),
+          );
+        }
+
         return SafeArea(
           child: Scaffold(
             appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),

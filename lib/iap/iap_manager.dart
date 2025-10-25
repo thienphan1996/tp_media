@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
+import 'package:tp_media/network/internet_manager.dart';
 
 abstract class IapManager {
   final _controller = StreamController<bool>.broadcast();
@@ -14,27 +15,27 @@ abstract class IapManager {
 
   Future<CustomerInfo> get customerInfo => Purchases.getCustomerInfo();
 
-  void addCustomerInfoUpdateListener(
-    CustomerInfoUpdateListener customerInfoUpdateListener,
-  ) {
+  void addCustomerInfoUpdateListener(CustomerInfoUpdateListener customerInfoUpdateListener) {
     Purchases.addCustomerInfoUpdateListener(customerInfoUpdateListener);
   }
 
-  Future<CustomerInfo> init({CustomerInfo? customerInfo}) async {
-    Purchases.addCustomerInfoUpdateListener((customerInfo) {
-      _updateState(entitlementId, customerInfo);
-    });
+  Future<CustomerInfo?> init({CustomerInfo? customerInfo}) async {
+    if (await InternetManager.instance.isOnline) {
+      Purchases.addCustomerInfoUpdateListener((customerInfo) {
+        _updateState(entitlementId, customerInfo);
+      });
+    }
 
-    final info = customerInfo ?? await this.customerInfo;
-    _updateState(entitlementId, info);
-
-    return info;
+    try {
+      final info = customerInfo ?? await this.customerInfo;
+      _updateState(entitlementId, info);
+      return info;
+    } catch (e) {
+      return null;
+    }
   }
 
-  Future<bool> presentPaywallIfNeeded({
-    Offering? offering,
-    bool displayCloseButton = false,
-  }) async {
+  Future<bool> presentPaywallIfNeeded({Offering? offering, bool displayCloseButton = false}) async {
     if (isSubscribed) {
       return Future.value(true);
     }
@@ -45,28 +46,20 @@ abstract class IapManager {
       displayCloseButton: displayCloseButton,
     );
 
-    if (paywallResult == PaywallResult.purchased ||
-        paywallResult == PaywallResult.restored) {
+    if (paywallResult == PaywallResult.purchased || paywallResult == PaywallResult.restored) {
       return refreshFromRevenueCat();
     }
 
     return Future.value(isSubscribed);
   }
 
-  Future<bool> presentPaywall({
-    Offering? offering,
-    bool displayCloseButton = false,
-  }) async {
+  Future<bool> presentPaywall({Offering? offering, bool displayCloseButton = false}) async {
     if (isSubscribed) {
       return Future.value(true);
     }
 
-    final paywallResult = await RevenueCatUI.presentPaywall(
-      offering: offering,
-      displayCloseButton: displayCloseButton,
-    );
-    if (paywallResult == PaywallResult.purchased ||
-        paywallResult == PaywallResult.restored) {
+    final paywallResult = await RevenueCatUI.presentPaywall(offering: offering, displayCloseButton: displayCloseButton);
+    if (paywallResult == PaywallResult.purchased || paywallResult == PaywallResult.restored) {
       return refreshFromRevenueCat();
     }
 
@@ -81,12 +74,8 @@ abstract class IapManager {
     }
   }
 
-  Future<bool> _updateState(
-    String entitlementId,
-    CustomerInfo customerInfo,
-  ) async {
-    final active =
-        customerInfo.entitlements.all[entitlementId]?.isActive ?? false;
+  Future<bool> _updateState(String entitlementId, CustomerInfo customerInfo) async {
+    final active = customerInfo.entitlements.all[entitlementId]?.isActive ?? false;
     if (active != isSubscribed) {
       isSubscribed = active;
       _controller.add(active);
