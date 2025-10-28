@@ -38,3 +38,7 @@
 ## 1.0.2
 
 * Fix show paywall when no internet
+
+## 1.0.3
+
+* Add common widgets

@@ -1,9 +1,9 @@
-# tp_media
+# TP MEDIA
 
 A compact Flutter utility package providing fast AdMob ad integration, in-app purchase helpers, and a suite of common UI utilities and widgets for rapid app development.
 
 [![pub.dev](https://img.shields.io/pub/v/tp_media.svg)](https://pub.dev/packages/tp_media)
-[Repository](https://github.com/thienphan1996/tp_media)
+[![pub points](https://img.shields.io/pub/points/tp_media?color=2E8B57&label=pub%20points)](https://pub.dev/packages/tp_media/score)
 
 ## Features
 - **AdMob Integration**: Fast banner, open, interstitial, and rewarded ad helpers
