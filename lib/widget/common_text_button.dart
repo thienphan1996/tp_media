@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tp_media/theme/theme.dart';
 
 class CommonTextButton extends StatelessWidget {
   const CommonTextButton({
@@ -31,9 +32,7 @@ class CommonTextButton extends StatelessWidget {
                 : Theme.of(context).disabledColor,
           ),
           shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: radius ?? BorderRadius.circular(8),
-            ),
+            RoundedRectangleBorder(borderRadius: radius ?? smallBorderRadius),
           ),
         ),
         child: Padding(

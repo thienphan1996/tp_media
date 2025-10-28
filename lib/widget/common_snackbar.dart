@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tp_media/extension/context_ex.dart';
+import 'package:tp_media/theme/theme.dart';
 
 class CommonSnackBar extends SnackBar {
   CommonSnackBar.success({
@@ -25,7 +26,7 @@ class CommonSnackBar extends SnackBar {
          backgroundColor: Colors.green,
          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 32),
          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+         shape: RoundedRectangleBorder(borderRadius: smallBorderRadius),
          behavior: SnackBarBehavior.floating,
        );
 
@@ -52,7 +53,7 @@ class CommonSnackBar extends SnackBar {
          backgroundColor: Colors.black45,
          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 32),
          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+         shape: RoundedRectangleBorder(borderRadius: smallBorderRadius),
          behavior: SnackBarBehavior.floating,
        );
 
@@ -79,7 +80,7 @@ class CommonSnackBar extends SnackBar {
          backgroundColor: Colors.orange.withValues(alpha: .1),
          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 32),
          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+         shape: RoundedRectangleBorder(borderRadius: smallBorderRadius),
          behavior: SnackBarBehavior.floating,
        );
 
@@ -106,7 +107,7 @@ class CommonSnackBar extends SnackBar {
          backgroundColor: context.colors.error,
          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 32),
          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+         shape: RoundedRectangleBorder(borderRadius: smallBorderRadius),
          behavior: SnackBarBehavior.floating,
        );
 }

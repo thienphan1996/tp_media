@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tp_media/theme/theme.dart';
 
 Widget buildTrackingTransparencyDialog(
   BuildContext context, {
@@ -51,7 +52,7 @@ Future<void> showTrackingTransparencyDialog(
     context: context,
     builder: (_) {
       return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(borderRadius: largeBorderRadius),
         child: dialogContent,
       );
     },

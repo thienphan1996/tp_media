@@ -150,13 +150,13 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
           );
         }
 
-        return SafeArea(
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-              title: Text(widget.title),
-            ),
-            body: TopRoundedContainer(
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            title: Text(widget.title),
+          ),
+          body: SafeArea(
+            child: TopRoundedContainer(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -200,11 +200,11 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
                 ),
               ),
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: _incrementCounter,
-              tooltip: 'Increment',
-              child: const Icon(Icons.add),
-            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
           ),
         );
       },
