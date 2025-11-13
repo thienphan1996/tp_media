@@ -42,3 +42,7 @@
 ## 1.0.3
 
 * Add common widgets
+
+## 1.0.4
+
+* Fix dismiss loading dialog

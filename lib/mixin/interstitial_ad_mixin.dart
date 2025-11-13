@@ -4,8 +4,7 @@ import 'package:tp_media/ads/admob_enable.dart';
 import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
-    implements AdmobEnable {
+mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
   InterstitialAd? _interstitialAd;
   bool _isLoadingAd = false;
 
@@ -54,20 +53,20 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             _interstitialAd = ad;
-            hideLoadingDialog();
+            hideDialogLoading();
             showAd(onDismissAd: onDismissAd);
           },
           onAdFailedToLoad: (LoadAdError error) {
-            onDismissAd?.call();
-            hideLoadingDialog();
+            hideDialogLoading();
             loadAd();
+            onDismissAd?.call();
           },
         ),
       );
     }
   }
 
-  void hideLoadingDialog() {
+  void hideDialogLoading() {
     if (_isLoadingAd) {
       _isLoadingAd = false;
       Navigator.pop(context);
@@ -82,14 +81,14 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
     if (_interstitialAd != null) {
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (InterstitialAd ad) {
-          onDismissAd?.call();
           disposeAd();
           loadAd();
+          onDismissAd?.call();
         },
         onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
-          onDismissAd?.call();
           disposeAd();
           loadAd();
+          onDismissAd?.call();
         },
       );
       _interstitialAd?.show();
