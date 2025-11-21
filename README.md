@@ -1,131 +1,354 @@
 # TP MEDIA
 
-A compact Flutter utility package providing fast AdMob ad integration, in-app purchase helpers, and a suite of common UI utilities and widgets for rapid app development.
+A comprehensive Flutter utility package providing fast AdMob ad integration, in-app purchase management via RevenueCat, network connectivity monitoring, and a rich suite of common UI utilities and widgets for rapid app development.
 
 [![pub.dev](https://img.shields.io/pub/v/tp_media.svg)](https://pub.dev/packages/tp_media)
 [![pub points](https://img.shields.io/pub/points/tp_media?color=2E8B57&label=pub%20points)](https://pub.dev/packages/tp_media/score)
 
-## Features
-- **AdMob Integration**: Fast banner, open, interstitial, and rewarded ad helpers
-  - `AdmobBannerAd`: Responsive banner ad widget that adapts to orientation and screen size. Supports test mode for development.
-  - `AdmobOpenAd`: Easily show app open ads on app launch or resume.
-  - `InterstitialAdMixin` & `RewardedAdMixin`: Mixins for simple integration of interstitial and rewarded ads with callbacks for ad events.
-  - `AdmobInitializer`: One-call initialization for Google Mobile Ads SDK.
-  - `TrackingTransparencyDialog`: iOS dialog for ATT (App Tracking Transparency) permission.
+## 🎯 Overview
 
-- **IAP Utilities**: Easy in-app purchase setup and management
-  - `IapInitializer`: Initialize in-app purchase plugins and handle platform setup.
-  - `IapManager`: Manage product purchases, listen for updates, and restore transactions.
+`tp_media` is designed to streamline common development tasks in Flutter apps, especially those requiring monetization through ads and in-app purchases. It provides production-ready components with minimal boilerplate, built on top of popular packages like Google Mobile Ads, RevenueCat, and Flutter's ecosystem tools.
 
-- **UI Widgets**: Common cards, empty states, icon/text buttons, text fields, snackbars, loading indicators
-  - `CommonCard`, `CommonEmpty`, `CommonIconButton`, `CommonTextButton`, `CommonTextField`, `CommonSnackbar`, `GlobalLoading`, `TopRoundedContainer`, `MaterialInkWell`.
-  - Consistent design and easy customization for rapid UI development.
+## ✨ Features
 
-- **Dialogs**: Customizable alert dialogs, iOS tracking transparency dialog
-  - `CommonAlertDialog`: Flexible dialog for alerts, confirmations, and custom actions.
-  - `TrackingTransparencyDialog`: Request user tracking permission on iOS.
+### 🎬 AdMob Integration
+- **`AdmobBannerAd`**: Responsive, orientation-aware banner ads with automatic reload and internet connectivity checks. Test mode support for iOS screenshots.
+- **`AdmobOpenAd`**: App open ad display for launch and resume scenarios.
+- **`InterstitialAdMixin`**: Mixin for seamless interstitial ad loading and display with callbacks.
+- **`RewardedAdMixin`**: Mixin for rewarded ad integration with reward callbacks.
+- **`AdmobInitializer`**: One-call initialization for Google Mobile Ads SDK.
+- **`TrackingTransparencyDialog`**: iOS-native ATT (App Tracking Transparency) permission dialog.
+- **Internet-aware loading**: Ads don't load when offline, saving bandwidth.
 
-- **Extensions**: Handy extensions for context, double, string, iterable, scroll controller, and text
-  - `context.showSnackbar('Message')`: Show a SnackBar from any context.
-  - `double.round()`: Format doubles with smart precision.
-  - `String.capitalize()`, `String.isNullOrEmpty()`: String utilities.
-  - `ScrollController.scrollToBottom`: Check if scroll is at the end.
-  - `IterableExtension`: Extra methods for collections.
+### 💳 In-App Purchase (IAP) Management
+Powered by RevenueCat for cross-platform purchase handling:
+- **`IapInitializer`**: Initialize RevenueCat SDK with custom managers.
+- **`IapManager`**: Abstract base for managing subscriptions, listening to purchase updates, restoring transactions.
+- **Stream-based subscription state**: Real-time subscription status monitoring.
+- **Paywall integration**: Easy-to-use RevenueCat Paywall UI display.
+- **Customer info caching**: Efficient customer data management.
 
-- **Utilities**: Toasts, date/time helpers
-  - `ToastUtils.success('Success!')`, `ToastUtils.error('Error!')`.
-  - `DateTimeUtils.toStringDisplay(date)`, `DateTimeUtils.nowDisplay`.
+### 🎨 UI Widgets
+Production-ready widgets for rapid development:
+- **`CommonCard`**: Customizable card with rounded corners and borders.
+- **`CommonEmpty`**: Empty state widget with Lottie animation support.
+- **`CommonIconButton`**: Styled icon button with feedback.
+- **`CommonTextButton`**: Text button widget with consistent theming.
+- **`CommonTextField`**: Customizable text input field.
+- **`CommonSnackbar`**: Helper for showing snackbars.
+- **`GlobalLoading`**: Full-screen loading indicator.
+- **`TopRoundedContainer`**: Container with top-rounded corners.
+- **`MaterialInkWell`**: Material ripple effect wrapper.
+- **`DisableContainer`**: Wrapper to disable user interactions.
+- **`TakeIfContainer`**: Conditional visibility wrapper.
+- **`PremiumUser`**: Widget for premium content display.
+- **`DialogHeader`**: Reusable dialog header component.
+- **`ClearFocusOnTap`**: Dismiss keyboard on tap.
+- **`InternetChecker`**: Network status indicator widget.
+- **`HeaderSliverList`**: Sliver widget with header support.
+- **`StickyHeaderDelegate`**: Custom sliver delegate for sticky headers.
 
-- **Mixins**: For interstitial and rewarded ad logic
+### 🗣️ Dialogs
+- **`CommonAlertDialog`**: iOS-native style alert dialog (Cupertino) with title, message, and custom actions.
+- **`TrackingTransparencyDialog`**: iOS ATT permission request dialog.
+- **`showAlertDialog()`**: Helper function for quick dialog creation.
 
-## Getting Started
-Add the package to your `pubspec.yaml`:
+### 🔌 Extensions & Utilities
+
+**Context Extensions:**
+- `context.showSnackbar('Message')` — Show snackbar
+- `context.showSuccessSnackBar('Message')` — Green snackbar
+- `context.showErrorSnackBar('Message')` — Red snackbar
+
+**String Extensions:**
+- `'hello'.capitalize()` — Capitalize first letter → "Hello"
+- `'hello'.vnToEn` — Convert Vietnamese diacritics to English
+- `'12345'.isPhoneNumber()` — Validate phone number (VN format)
+- `'https://example.com'.isUri()` — Check if valid URI
+- `'3.14'.replaceComma` — Replace commas with dots
+
+**Double Extensions:**
+- `3.14159.round(2)` — Smart rounding with precision
+
+**ScrollController Extensions:**
+- `scrollController.scrollToBottom()` — Check if scroll is at bottom
+- `scrollController.isAtTop` — Check if scroll is at top
+
+**Text Extensions:**
+- Utility extensions for text formatting
+
+**Iterable Extensions:**
+- Extra utility methods for collections
+
+### 📡 Network Management
+- **`InternetManager`**: Singleton for checking internet connectivity.
+  - `InternetManager.instance.isOnline` — Check current connection status
+  - `InternetManager.instance.onStatusChange` — Stream of connection changes
+
+### 🎚️ State Management
+- **`LoadingDialogState`**: Mixin for showing/hiding loading dialogs from state.
+
+### 🎨 Theming
+- **`theme`** package: Pre-built theme configurations.
+
+### ⏰ Utilities
+- **`ToastUtils`**: 
+  - `ToastUtils.success('Message')`
+  - `ToastUtils.failed('Message')`
+  - `ToastUtils.updated('Message')`
+  - `ToastUtils.deleted('Message')`
+
+- **`DateTimeUtils`**: Date and time formatting utilities.
+
+- **`CommonUtils`**: General utility functions.
+
+- **`InAppReviewChecker`**: Helper for requesting app reviews.
+
+## 📦 Dependencies
+
+This package relies on:
+- `google_mobile_ads`: ^6.0.0 — Google AdMob SDK
+- `purchases_flutter`: ^9.8.0 — RevenueCat IAP SDK
+- `purchases_ui_flutter`: ^9.8.0 — RevenueCat Paywall UI
+- `app_tracking_transparency`: ^2.0.6+1 — iOS ATT dialog
+- `lottie`: ^3.3.2 — Animations
+- `fluttertoast`: ^9.0.0 — Toast notifications
+- `internet_connection_checker_plus`: ^2.9.0 — Connectivity detection
+- `in_app_review`: ^2.0.11 — App review requests
+- `intl`: ^0.20.2 — Internationalization
+
+## 🚀 Getting Started
+
+### Installation
+
+Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  tp_media: ^latest_version
+  tp_media: ^1.0.3
 ```
 
 Then run:
 
-```sh
+```bash
 flutter pub get
 ```
 
-## Usage
-Import the package:
+### Import
 
 ```dart
 import 'package:tp_media/tp_media.dart';
 ```
 
-### More
-- Use provided widgets for cards, empty states, buttons, and text fields
-- Use extensions for concise code
-- See the [example app](example) for full integration patterns
+## 📖 Usage Guide
 
-## Detailed Usage & API
+### AdMob Setup
 
-### AdMob Ads
-#### Banner Ad
-A responsive banner ad that adapts to screen orientation and width.
+#### Initialize AdMob SDK
 
 ```dart
-AdmobBannerAd(
-  'your-ad-unit-id',
-)
-```
-- Set `AdmobBannerAd.isTestMode = true;` to enable test ads for iOS screenshots purpose.
-- Automatically reloads on orientation change.
+import 'package:tp_media/tp_media.dart';
 
-#### App Open Ad
-```dart
-await AdmobOpenAd.showAdIfAvailable();
-```
-
-#### Interstitial & Rewarded Ads
-Use mixins for easy integration:
-```dart
-class MyWidgetState extends State<MyWidget> with InterstitialAdMixin, RewardedAdMixin {
-  // Call showInterstitialAd() or showRewardedAd() as needed
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AdmobInitializer.init();
+  runApp(MyApp());
 }
 ```
 
-### In-App Purchases (IAP)
-#### Initialization
+#### Display Banner Ad
+
 ```dart
-await IapInitializer.init([TestIapManager.instance,...]);
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      Expanded(child: YourContent()),
+      AdmobBannerAd('ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy'), // Replace with your ad unit ID
+    ],
+  );
+}
 ```
-#### Purchase Flow
+
+**Test Mode** (for iOS screenshots):
 ```dart
-class TestIapManager extends IapManager {
-  TestIapManager._internal();
+AdmobBannerAd.isTestMode = true; // Set before showing
+```
 
-  static final _instance = TestIapManager._internal();
+#### Display App Open Ad
 
-  static TestIapManager get instance => _instance;
+```dart
+@override
+void didChangeAppLifecycleState(AppLifecycleState state) {
+  if (state == AppLifecycleState.resumed) {
+    AdmobOpenAd.showAdIfAvailable();
+  }
+}
+```
+
+#### Interstitial & Rewarded Ads with Mixins
+
+```dart
+class MyPage extends StatefulWidget {
+  @override
+  State<MyPage> createState() => _MyPageState();
+}
+
+class _MyPageState extends State<MyPage> with InterstitialAdMixin, RewardedAdMixin {
+  @override
+  String get interstitialUnitId => 'ca-app-pub-xxx';
 
   @override
-  String entitlementId = 'Testing';
+  String get rewardedUnitId => 'ca-app-pub-yyy';
+
+  @override
+  bool get isEnableAd => true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadAd(); // Load interstitial
+    loadRewardedAd(); // Load rewarded
+  }
+
+  void showInterstitialOnButtonTap() {
+    loadAndShowAd(
+      onDismissAd: () {
+        print('User dismissed ad');
+      },
+    );
+  }
+
+  void showRewardOnButtonTap() {
+    loadAndShowRewardedAd(
+      onUserEarnedReward: (reward) {
+        print('User earned: ${reward.amount} ${reward.type}');
+      },
+      onDismissAd: () {
+        print('Rewarded ad dismissed');
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CommonTextButton(
+              text: 'Show Interstitial',
+              onPressed: showInterstitialOnButtonTap,
+            ),
+            SizedBox(height: 16),
+            CommonTextButton(
+              text: 'Show Rewarded',
+              onPressed: showRewardOnButtonTap,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
+```
+
+### In-App Purchases (RevenueCat)
+
+#### Create Custom IAP Manager
+
+```dart
+class MyIapManager extends IapManager {
+  MyIapManager._internal();
+  
+  static final _instance = MyIapManager._internal();
+  static MyIapManager get instance => _instance;
+
+  @override
+  String entitlementId = 'pro_subscription'; // Your RevenueCat entitlement ID
+}
+```
+
+#### Initialize IAP
+
+```dart
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  await IapInitializer.init([MyIapManager.instance]);
+  
+  runApp(MyApp());
+}
+```
+
+#### Check Subscription Status
+
+```dart
+class PremiumContent extends StatefulWidget {
+  @override
+  State<PremiumContent> createState() => _PremiumContentState();
+}
+
+class _PremiumContentState extends State<PremiumContent> {
+  @override
+  void initState() {
+    super.initState();
+    MyIapManager.instance.stream.listen((isSubscribed) {
+      print('Subscription status: $isSubscribed');
+      setState(() {});
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<bool>(
+      stream: MyIapManager.instance.stream,
+      builder: (context, snapshot) {
+        final isSubscribed = snapshot.data ?? false;
+        
+        return isSubscribed
+            ? PremiumFeatures()
+            : PaywallScreen();
+      },
+    );
+  }
+}
+```
+
+#### Show Paywall
+
+```dart
+CommonTextButton(
+  text: 'Show Paywall',
+  onPressed: () async {
+    final result = await MyIapManager.instance.presentPaywallIfNeeded();
+    if (result) {
+      print('Purchase successful or already subscribed');
+    }
+  },
+)
 ```
 
 ### Dialogs
+
 #### Common Alert Dialog
-Customizable dialog for alerts and confirmations.
+
 ```dart
-showDialog(
-  context: context,
-  builder: (_) => CommonAlertDialog(
-    title: 'Title',
-    message: 'Message',
-    okText: 'okText',
-    cancelText: 'cancelText',
-    onOkButton: () {},
-  ),
+showAlertDialog(
+  context,
+  title: 'Confirm',
+  message: 'Are you sure?',
+  okText: 'Yes',
+  cancelText: 'No',
+  onOkButton: () {
+    print('User confirmed');
+    Navigator.pop(context);
+  },
 );
 ```
-#### Tracking Transparency Dialog (iOS)
+
+#### iOS Tracking Transparency
+
 ```dart
 showDialog(
   context: context,
@@ -133,48 +356,176 @@ showDialog(
 );
 ```
 
-### Extensions
-- `context.showSuccessSnackBar('Message')` — Show a SnackBar from any context
-- `3.14.round(1)` — Double extensions
-- `'abc'.capitalize()` — String extensions
-- `scrollController.scrollToBottom` — ScrollController extensions
+### Common Widgets
 
-### Utilities
-- `ToastUtils.success('Message')` — Show a toast
-- `DateTimeUtils.format(date)` — Format dates
+#### Cards
+```dart
+CommonCard(
+  child: Padding(
+    padding: EdgeInsets.all(16),
+    child: Text('Card content'),
+  ),
+  radius: BorderRadius.circular(12),
+  elevation: 4,
+)
+```
 
-### Widgets
-- `CommonCard(child: ...)` — Card with consistent style
-- `CommonEmpty()` — Empty state with animation
-- `CommonIconButton(icon: Icons.add, onPressed: ...)`
-- `CommonTextButton(text: 'OK', onPressed: ...)`
-- `CommonTextField(controller: ...)`
-- `CommonSnackbar.show(context, 'Message')`
-- `GlobalLoading.show(context)` / `GlobalLoading.hide()`
+#### Empty State
+```dart
+CommonEmpty(
+  title: 'No data',
+  description: 'Try again later',
+)
+```
 
-### Mixins
-- `InterstitialAdMixin` and `RewardedAdMixin` provide easy ad loading/showing with callbacks for success/failure.
+#### Buttons
+```dart
+CommonTextButton(
+  text: 'Click Me',
+  onPressed: () {},
+)
 
-## Platform Setup
+CommonIconButton(
+  icon: Icons.add,
+  onPressed: () {},
+)
+```
+
+#### Text Field
+```dart
+CommonTextField(
+  controller: _controller,
+  hintText: 'Enter text',
+)
+```
+
+#### Loading
+```dart
+GlobalLoading.show(context); // Show loading
+// ... async operation ...
+GlobalLoading.hide(); // Hide loading
+```
+
+### Extensions Usage
+
+```dart
+// Context
+context.showSnackbar('Hello');
+context.showSuccessSnackBar('Success!');
+context.showErrorSnackBar('Error!');
+
+// String
+print('hello'.capitalize()); // Hello
+print('hà nội'.vnToEn); // ha noi
+
+// Double
+print(3.14159.round(2)); // 3.14
+
+// ScrollController
+if (scrollController.scrollToBottom) {
+  print('Scrolled to bottom');
+}
+```
+
+### Toasts
+
+```dart
+ToastUtils.success('Operation successful');
+ToastUtils.failed('Operation failed');
+ToastUtils.updated('Item updated');
+ToastUtils.deleted('Item deleted');
+```
+
+### Network Connectivity
+
+```dart
+// Check current status
+final isOnline = await InternetManager.instance.isOnline;
+print('Online: $isOnline');
+
+// Listen to changes
+InternetManager.instance.onStatusChange.listen((status) {
+  print('Status: $status');
+});
+```
+
+## 🔧 Platform Configuration
+
 ### Android
-- Add required permissions to `AndroidManifest.xml`:
+
+Add to `android/app/build.gradle.kts`:
+```gradle
+android {
+    defaultConfig {
+        minSdkVersion 21
+    }
+}
+```
+
+Add permissions to `AndroidManifest.xml`:
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
-- For IAP, configure Google Play Billing in your app.
 
 ### iOS
-- Add permissions and tracking descriptions to `Info.plist`:
+
+Add to `ios/Podfile` (if needed):
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
+        '$(inherited)',
+        'PERMISSION_APP_TRACKING_TRANSPARENCY=1',
+      ]
+    end
+  end
+end
+```
+
+Add to `ios/Runner/Info.plist`:
 ```xml
 <key>NSUserTrackingUsageDescription</key>
 <string>This identifier will be used to deliver personalized ads to you.</string>
 ```
-- Configure URL schemes for IAP if needed.
 
-## Contributing
-Contributions, bug reports, and feature requests are welcome! Fork the repo, create a branch, and submit a pull request.
+## 📚 Example
 
-## License
-See the [LICENSE](LICENSE) file for details.
+See the [example app](example/) for a complete working implementation including:
+- AdMob banner, interstitial, and rewarded ads
+- RevenueCat in-app purchases
+- Common widgets usage
+- Extensions examples
+
+Run it with:
+```bash
+cd example
+flutter run
+```
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+Built with ❤️ using:
+- [Google Mobile Ads](https://pub.dev/packages/google_mobile_ads)
+- [RevenueCat](https://pub.dev/packages/purchases_flutter)
+- [Lottie](https://pub.dev/packages/lottie)
+- [Flutter](https://flutter.dev)
+
+---
+
+For more information, visit the [repository](https://github.com/thienphan1996/tp_media).
 

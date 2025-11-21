@@ -20,11 +20,51 @@ extension StringEx on String {
     return regExp.hasMatch(this);
   }
 
-  bool validatePhone() {
+  bool isPhoneNumber() {
     var pattern = r'^(?:[+0]84)?[0-9]{9,}$';
     RegExp regex = RegExp(pattern);
 
     return regex.hasMatch(this);
+  }
+
+  String get vnToEn {
+    const from =
+        "àáạảãâầấậẩẫăằắặẳẵ"
+        "èéẹẻẽêềếệểễ"
+        "ìíịỉĩ"
+        "òóọỏõôồốộổỗơờớợởỡ"
+        "ùúụủũưừứựửữ"
+        "ỳýỵỷỹ"
+        "đ"
+        "ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴ"
+        "ÈÉẸẺẼÊỀẾỆỂỄ"
+        "ÌÍỊỈĨ"
+        "ÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠ"
+        "ÙÚỤỦŨƯỪỨỰỬỮ"
+        "ỲÝỴỶỸ"
+        "Đ";
+
+    const to =
+        "aaaaaaaaaaaaaaaaa"
+        "eeeeeeeeeee"
+        "iiiii"
+        "ooooooooooooooooo"
+        "uuuuuuuuuuu"
+        "yyyyy"
+        "d"
+        "AAAAAAAAAAAAAAAAA"
+        "EEEEEEEEEEE"
+        "IIIII"
+        "OOOOOOOOOOOOOOOOO"
+        "UUUUUUUUUUU"
+        "YYYYY"
+        "D";
+
+    String result = this;
+    for (int i = 0; i < from.length; i++) {
+      result = result.replaceAll(from[i], to[i]);
+    }
+    return result;
   }
 }
 

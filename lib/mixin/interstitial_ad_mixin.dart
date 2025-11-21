@@ -6,7 +6,7 @@ import 'package:tp_media/state/loading_dialog_state.dart';
 
 mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
   InterstitialAd? _interstitialAd;
-  bool _isLoadingAd = false;
+  bool _isLoadingInterstitialAd = false;
 
   abstract String interstitialUnitId;
 
@@ -15,18 +15,18 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements Admob
       return;
     }
 
-    if (!_isLoadingAd && _interstitialAd == null) {
-      _isLoadingAd = true;
+    if (!_isLoadingInterstitialAd && _interstitialAd == null) {
+      _isLoadingInterstitialAd = true;
       InterstitialAd.load(
         adUnitId: interstitialUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             _interstitialAd = ad;
-            _isLoadingAd = false;
+            _isLoadingInterstitialAd = false;
           },
           onAdFailedToLoad: (LoadAdError error) {
-            _isLoadingAd = false;
+            _isLoadingInterstitialAd = false;
           },
         ),
       );
@@ -39,13 +39,13 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements Admob
       return;
     }
 
-    if (!_isLoadingAd && _interstitialAd != null) {
+    if (!_isLoadingInterstitialAd && _interstitialAd != null) {
       showAd(onDismissAd: onDismissAd);
       return;
     }
 
-    if (!_isLoadingAd && _interstitialAd == null && mounted) {
-      _isLoadingAd = true;
+    if (!_isLoadingInterstitialAd && _interstitialAd == null && mounted) {
+      _isLoadingInterstitialAd = true;
       showDialogLoading(context);
       InterstitialAd.load(
         adUnitId: interstitialUnitId,
@@ -53,11 +53,11 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements Admob
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
             _interstitialAd = ad;
-            hideDialogLoading();
+            hideInterstitialLoading();
             showAd(onDismissAd: onDismissAd);
           },
           onAdFailedToLoad: (LoadAdError error) {
-            hideDialogLoading();
+            hideInterstitialLoading();
             loadAd();
             onDismissAd?.call();
           },
@@ -66,15 +66,15 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements Admob
     }
   }
 
-  void hideDialogLoading() {
-    if (_isLoadingAd) {
-      _isLoadingAd = false;
+  void hideInterstitialLoading() {
+    if (_isLoadingInterstitialAd) {
+      _isLoadingInterstitialAd = false;
       Navigator.pop(context);
     }
   }
 
   void showAd({VoidCallback? onDismissAd}) {
-    if (!isEnableAd || _isLoadingAd) {
+    if (!isEnableAd || _isLoadingInterstitialAd) {
       return;
     }
 

@@ -4,17 +4,13 @@ import 'package:tp_media/ads/admob_enable.dart';
 import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
-    implements AdmobEnable {
+mixin RewardedAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
   RewardedAd? _rewardedAd;
-  bool _isLoadingAd = false;
+  bool _isLoadingRewardedAd = false;
 
   abstract String rewardedUnitId;
 
-  void loadAndShowRewardAd({
-    Function(RewardItem)? onRewarded,
-    VoidCallback? onDismiss,
-  }) async {
+  void loadAndShowRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) async {
     if (!isEnableAd || await InternetManager.instance.isOnline == false) {
       onDismiss?.call();
       return;
@@ -26,7 +22,7 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
 
     _rewardedAd?.dispose();
     _rewardedAd = null;
-    _isLoadingAd = true;
+    _isLoadingRewardedAd = true;
 
     showDialogLoading(context);
 
@@ -40,32 +36,29 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
           // Keep a reference to the ad so you can show it later.
           _rewardedAd = ad;
 
-          hideDialogLoading();
+          hideRewardedLoading();
           showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
         },
         onAdFailedToLoad: (LoadAdError error) {
           // Called when an ad request failed.
           debugPrint('Ad failed to load with error: $error');
 
-          hideDialogLoading();
+          hideRewardedLoading();
           onDismiss?.call();
         },
       ),
     );
   }
 
-  void hideDialogLoading() {
-    if (_isLoadingAd) {
-      _isLoadingAd = false;
+  void hideRewardedLoading() {
+    if (_isLoadingRewardedAd) {
+      _isLoadingRewardedAd = false;
       Navigator.pop(context);
     }
   }
 
-  void showRewardAd({
-    Function(RewardItem)? onRewarded,
-    VoidCallback? onDismiss,
-  }) {
-    if (!isEnableAd || _isLoadingAd) {
+  void showRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {
+    if (!isEnableAd || _isLoadingRewardedAd) {
       return;
     }
 
