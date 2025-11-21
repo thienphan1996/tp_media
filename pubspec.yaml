@@ -1,6 +1,6 @@
 name: tp_media
 description: "Flutter common package by TP MEDIA. Support Admob to show ads, RevenueCat to show Paywall and handle In app purchase."
-version: 1.0.4
+version: 1.0.5
 homepage: https://github.com/thienphan1996/tp_media.git
 
 environment:
