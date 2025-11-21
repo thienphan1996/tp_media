@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:tp_media/theme/theme.dart';
 
 class CommonCard extends StatelessWidget {
-  const CommonCard({super.key, this.child, this.radius, this.elevation = 2, this.borderColor});
+  const CommonCard({
+    super.key,
+    this.child,
+    this.radius,
+    this.elevation = 2,
+    this.borderColor,
+  });
 
   final Widget? child;
   final double elevation;

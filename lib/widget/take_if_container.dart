@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TakeIfContainer extends StatelessWidget {
-  const TakeIfContainer({super.key, required this.condition, required this.child, this.orElse});
+  const TakeIfContainer({
+    super.key,
+    required this.condition,
+    required this.child,
+    this.orElse,
+  });
 
   final bool condition;
   final Widget Function() child;

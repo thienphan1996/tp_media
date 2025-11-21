@@ -20,7 +20,10 @@ class DialogHeader extends StatelessWidget {
     return Material(
       elevation: 1,
       color: context.colors.surface,
-      borderRadius: BorderRadius.only(topLeft: Radius.circular(borderRadius), topRight: Radius.circular(borderRadius)),
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(borderRadius),
+        topRight: Radius.circular(borderRadius),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -33,7 +36,10 @@ class DialogHeader extends StatelessWidget {
                 Container(
                   width: 42,
                   height: 4,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.grey.shade300),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.grey.shade300,
+                  ),
                 ),
               ],
             ),
@@ -45,10 +51,18 @@ class DialogHeader extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: isShowTopDivider ? 12 : 16),
+                    padding: EdgeInsets.symmetric(
+                      vertical: isShowTopDivider ? 12 : 16,
+                    ),
                     child: Text(
                       title,
-                      style: titleStyle ?? TextStyle(fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.bold),
+                      style:
+                          titleStyle ??
+                          TextStyle(
+                            fontSize: 20.0,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                   ),
                 ),
@@ -60,7 +74,11 @@ class DialogHeader extends StatelessWidget {
                 child: Container(
                   width: 48,
                   padding: EdgeInsets.only(top: isShowTopDivider ? 6 : 12),
-                  child: Icon(Icons.close_rounded, color: Colors.black54, size: 28),
+                  child: Icon(
+                    Icons.close_rounded,
+                    color: Colors.black54,
+                    size: 28,
+                  ),
                 ),
               ),
             ],

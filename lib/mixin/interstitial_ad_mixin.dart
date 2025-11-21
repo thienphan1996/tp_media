@@ -4,7 +4,8 @@ import 'package:tp_media/ads/admob_enable.dart';
 import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
+mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
+    implements AdmobEnable {
   InterstitialAd? _interstitialAd;
   bool _isLoadingInterstitialAd = false;
 
@@ -33,14 +34,14 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements Admob
     }
   }
 
-  void loadAndShowAd({VoidCallback? onDismissAd}) async {
+  void loadAndShowAd({VoidCallback? onDismiss}) async {
     if (!isEnableAd || await InternetManager.instance.isOnline == false) {
-      onDismissAd?.call();
+      onDismiss?.call();
       return;
     }
 
     if (!_isLoadingInterstitialAd && _interstitialAd != null) {
-      showAd(onDismissAd: onDismissAd);
+      showAd(onDismissAd: onDismiss);
       return;
     }
 
@@ -54,12 +55,12 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T> implements Admob
           onAdLoaded: (InterstitialAd ad) {
             _interstitialAd = ad;
             hideInterstitialLoading();
-            showAd(onDismissAd: onDismissAd);
+            showAd(onDismissAd: onDismiss);
           },
           onAdFailedToLoad: (LoadAdError error) {
             hideInterstitialLoading();
             loadAd();
-            onDismissAd?.call();
+            onDismiss?.call();
           },
         ),
       );

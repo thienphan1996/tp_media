@@ -25,7 +25,12 @@ class HeaderSliverList extends StatelessWidget {
             ? SliverToBoxAdapter(child: emptyItem)
             : SliverPadding(
               padding: padding ?? EdgeInsets.zero,
-              sliver: SliverList(delegate: SliverChildBuilderDelegate(builder, childCount: childCount)),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  builder,
+                  childCount: childCount,
+                ),
+              ),
             ),
       ],
     );

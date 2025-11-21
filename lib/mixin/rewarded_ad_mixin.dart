@@ -4,13 +4,17 @@ import 'package:tp_media/ads/admob_enable.dart';
 import 'package:tp_media/network/internet_manager.dart';
 import 'package:tp_media/state/loading_dialog_state.dart';
 
-mixin RewardedAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnable {
+mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
+    implements AdmobEnable {
   RewardedAd? _rewardedAd;
   bool _isLoadingRewardedAd = false;
 
   abstract String rewardedUnitId;
 
-  void loadAndShowRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) async {
+  void loadAndShowRewardAd({
+    Function(RewardItem)? onRewarded,
+    VoidCallback? onDismiss,
+  }) async {
     if (!isEnableAd || await InternetManager.instance.isOnline == false) {
       onDismiss?.call();
       return;
@@ -57,7 +61,10 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T> implements AdmobEnab
     }
   }
 
-  void showRewardAd({Function(RewardItem)? onRewarded, VoidCallback? onDismiss}) {
+  void showRewardAd({
+    Function(RewardItem)? onRewarded,
+    VoidCallback? onDismiss,
+  }) {
     if (!isEnableAd || _isLoadingRewardedAd) {
       return;
     }

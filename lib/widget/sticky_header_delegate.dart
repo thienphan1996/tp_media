@@ -16,7 +16,11 @@ class StickyHeaderDelegate extends SliverPersistentHeaderDelegate {
   });
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     final bool isPinned = shrinkOffset > 0;
 
     return Container(color: isPinned ? pinnedColor : normalColor, child: child);

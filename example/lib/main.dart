@@ -34,7 +34,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -49,7 +51,8 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialAdMixin, RewardedAdMixin {
+class _MyHomePageState extends LoadingDialogState<MyHomePage>
+    with InterstitialAdMixin, RewardedAdMixin {
   late OpenAdLifecycleReactor _appLifecycleReactor;
   late AdmobOpenAd _appOpenAdManager;
   var _adReady = false;
@@ -99,9 +102,14 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
   Future<void> _initAdmob() async {
     await AdmobInitializer.init(context, trackingTransparencyDialog(context));
 
-    _appOpenAdManager = AdmobOpenAd(openAdUnitId, isEnableAd: () => !TestIapManager.instance.isSubscribed);
+    _appOpenAdManager = AdmobOpenAd(
+      openAdUnitId,
+      isEnableAd: () => !TestIapManager.instance.isSubscribed,
+    );
     _appOpenAdManager.loadAd();
-    _appLifecycleReactor = OpenAdLifecycleReactor(appOpenAdManager: _appOpenAdManager);
+    _appLifecycleReactor = OpenAdLifecycleReactor(
+      appOpenAdManager: _appOpenAdManager,
+    );
     _appLifecycleReactor.listenToAppStateChanges();
   }
 
@@ -131,7 +139,11 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                 child: SizedBox(
                   width: 48,
                   height: 48,
-                  child: Center(child: CircularProgressIndicator(color: Theme.of(context).primaryColor)),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -140,7 +152,10 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
 
         return SafeArea(
           child: Scaffold(
-            appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary, title: Text(widget.title)),
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+              title: Text(widget.title),
+            ),
             body: ClearFocusOnTap(
               child: TopRoundedContainer(
                 child: HeaderSliverList(
@@ -148,7 +163,10 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                   padding: const EdgeInsets.only(bottom: 80),
                   header: Column(
                     children: [
-                      AdmobBannerAd(kTestAndroidBannerId, isEnableAd: !TestIapManager.instance.isSubscribed),
+                      AdmobBannerAd(
+                        kTestAndroidBannerId,
+                        isEnableAd: !TestIapManager.instance.isSubscribed,
+                      ),
                       SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -157,7 +175,10 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                             width: double.maxFinite,
                             padding: const EdgeInsets.all(16),
                             child: Center(
-                              child: InternetChecker(message: 'No internet connection.', child: Text('Has internet!')),
+                              child: InternetChecker(
+                                message: 'No internet connection.',
+                                child: Text('Has internet!'),
+                              ),
                             ),
                           ),
                         ),
@@ -169,7 +190,10 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              DisableContainer(disable: true, child: DialogHeader(title: 'Dialog title')),
+                              DisableContainer(
+                                disable: true,
+                                child: DialogHeader(title: 'Dialog title'),
+                              ),
                               CommonEmpty(emptyMessage: 'Test message'),
                             ],
                           ),
@@ -196,7 +220,8 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage> with InterstitialA
                             child: PremiumUser(
                               text: 'Hello Premium User',
                               title: 'Have a good day',
-                              isPremiumUser: TestIapManager.instance.isSubscribed || true,
+                              isPremiumUser:
+                                  TestIapManager.instance.isSubscribed || true,
                             ),
                           ),
                         ],

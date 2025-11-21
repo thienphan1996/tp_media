@@ -50,3 +50,7 @@
 ## 1.0.5
 
 * Add common widgets
+
+## 1.0.6
+
+* Cleanup source
