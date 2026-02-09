@@ -54,3 +54,8 @@
 ## 1.0.6
 
 * Cleanup source
+
+## 1.0.7
+
+* Add Native Ad
+* Optimize Premium User widget

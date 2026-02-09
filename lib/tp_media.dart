@@ -1,4 +1,5 @@
 export 'package:tp_media/ads/admob_banner_ad.dart';
+export 'package:tp_media/ads/admob_native_ad.dart';
 export 'package:tp_media/ads/admob_enable.dart';
 export 'package:tp_media/ads/admob_initializer.dart';
 export 'package:tp_media/ads/admob_open_ad.dart';

@@ -170,6 +170,13 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
                       SizedBox(height: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: AdmobNativeAd(
+                          kTestAndroidNativeAdId,
+                          excludePadding: 16,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: CommonCard(
                           child: Container(
                             width: double.maxFinite,
@@ -216,13 +223,11 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
                           SizedBox(height: 16),
                           CommonTextField(labelText: 'Testing field'),
                           SizedBox(height: 16),
-                          CommonCard(
-                            child: PremiumUser(
-                              text: 'Hello Premium User',
-                              title: 'Have a good day',
-                              isPremiumUser:
-                                  TestIapManager.instance.isSubscribed || true,
-                            ),
+                          PremiumUser(
+                            text: 'Hello Premium User',
+                            title: 'Have a good day',
+                            isPremiumUser:
+                                TestIapManager.instance.isSubscribed || true,
                           ),
                         ],
                       ),

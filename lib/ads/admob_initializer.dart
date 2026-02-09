@@ -11,7 +11,7 @@ const kTestAndroidInterstitialVideoId =
     "ca-app-pub-3940256099942544/8691691433";
 const kTestAndroidOpenAdId = "ca-app-pub-3940256099942544/9257395921";
 const kTestAndroidRewardedAdId = "ca-app-pub-3940256099942544/5224354917";
-const kTestAndroidNativeAdId = "ca-app-pub-3940256099942544/1044960115";
+const kTestAndroidNativeAdId = "ca-app-pub-3940256099942544/2247696110";
 
 const kTestIOSBannerId = "ca-app-pub-3940256099942544/2934735716";
 const kTestIOSInterstitialId = "ca-app-pub-3940256099942544/4411468910";
