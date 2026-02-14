@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:tp_media/external/lottie.dart';
 import 'package:tp_media/theme/theme.dart';
 
+const defaultBackground = [
+  Color(0xFFFFE082), // Light Gold
+  Color(0xFFFFD54F), // Gold
+  Color(0xFFFFB300), // Amber
+];
+
 class PremiumUser extends StatelessWidget {
   const PremiumUser({
     required this.text,
     required this.title,
     required this.isPremiumUser,
     this.borderRadius = largeBorderRadius,
+    this.backgroundGradient = defaultBackground,
     super.key,
   });
 
@@ -15,6 +22,7 @@ class PremiumUser extends StatelessWidget {
   final String text;
   final bool isPremiumUser;
   final BorderRadius borderRadius;
+  final List<Color> backgroundGradient;
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +30,24 @@ class PremiumUser extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
+    final lastBackgroundColor = backgroundGradient.lastOrNull?.withValues(
+      alpha: .3,
+    );
+    final shadowColor =
+        lastBackgroundColor ?? const Color(0xFFFFB300).withValues(alpha: .3);
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFFFFE082), // Light Gold
-            Color(0xFFFFD54F), // Gold
-            Color(0xFFFFB300), // Amber
-          ],
+          colors: backgroundGradient,
         ),
         borderRadius: borderRadius,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFFFB300).withValues(alpha: .3),
+            color: shadowColor,
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -61,8 +71,8 @@ class PremiumUser extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    width: 48,
-                    height: 48,
+                    width: 56,
+                    height: 56,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.3),
                       shape: BoxShape.circle,
@@ -75,7 +85,7 @@ class PremiumUser extends StatelessWidget {
                       repeat: true,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +102,7 @@ class PremiumUser extends StatelessWidget {
                         ),
                         if (text.trim().isNotEmpty)
                           Padding(
-                            padding: const EdgeInsets.only(top: 2.0),
+                            padding: const EdgeInsets.only(top: 4),
                             child: Text(
                               text,
                               style: TextStyle(

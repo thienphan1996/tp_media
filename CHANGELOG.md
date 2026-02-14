@@ -59,3 +59,8 @@
 
 * Add Native Ad
 * Optimize Premium User widget
+
+## 1.0.8
+
+* Add Upgrade Premium widget
+* Optimize Premium User widget

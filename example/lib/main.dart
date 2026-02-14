@@ -226,8 +226,49 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
                           PremiumUser(
                             text: 'Hello Premium User',
                             title: 'Have a good day',
-                            isPremiumUser:
-                                TestIapManager.instance.isSubscribed || true,
+                            isPremiumUser: true,
+                            backgroundGradient: [
+                              Colors.greenAccent,
+                              Colors.blue,
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          UpgradePremium(
+                            onTap: () {},
+                            backgroundGradient: [
+                              Colors.greenAccent,
+                              Colors.blue,
+                            ],
+                            title: 'Upgrade to Premium',
+                            isPremiumUser: false,
+                            enableNegativeButton: true,
+                            descriptions: [
+                              '✓  Remove ads.',
+                              '✓  Premium features.',
+                              '✓  More features.',
+                            ],
+                            negativeButton: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.ondemand_video, size: 16),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Try Premium',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            positiveButton: Text(
+                              'Upgrade',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
+                            ),
                           ),
                         ],
                       ),
