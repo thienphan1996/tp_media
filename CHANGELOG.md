@@ -64,3 +64,8 @@
 
 * Add Upgrade Premium widget
 * Optimize Premium User widget
+
+## 1.0.9
+
+* Fix show paywall when no internet
+* Add listener customer info update
