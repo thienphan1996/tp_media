@@ -69,3 +69,7 @@
 
 * Fix show paywall when no internet
 * Add listener customer info update
+
+## 1.0.10
+
+* Add check connection flag to presentPaywall functions
