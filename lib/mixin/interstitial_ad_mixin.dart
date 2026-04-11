@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tp_media/ads/admob_enable.dart';
@@ -8,6 +9,9 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
     implements AdmobEnable {
   InterstitialAd? _interstitialAd;
   bool _isLoadingInterstitialAd = false;
+  bool _isShowingDialog = false;
+  Completer<void>? _loadingCompleter;
+  int _retryCount = 0;
 
   abstract String interstitialUnitId;
 
@@ -18,16 +22,22 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
 
     if (!_isLoadingInterstitialAd && _interstitialAd == null) {
       _isLoadingInterstitialAd = true;
+      _loadingCompleter = Completer<void>();
       InterstitialAd.load(
         adUnitId: interstitialUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
+            _retryCount = 0;
             _interstitialAd = ad;
-            _isLoadingInterstitialAd = false;
+            hideInterstitialLoading();
           },
           onAdFailedToLoad: (LoadAdError error) {
-            _isLoadingInterstitialAd = false;
+            hideInterstitialLoading();
+            if (_retryCount < 5) {
+              _retryCount++;
+              loadAd();
+            }
           },
         ),
       );
@@ -40,26 +50,42 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
       return;
     }
 
-    if (!_isLoadingInterstitialAd && _interstitialAd != null) {
+    if (_interstitialAd != null) {
       showAd(onDismissAd: onDismiss);
       return;
     }
 
-    if (!_isLoadingInterstitialAd && _interstitialAd == null && mounted) {
+    if (_isLoadingInterstitialAd) {
+      if (!_isShowingDialog && mounted) {
+        _isShowingDialog = true;
+        showDialogLoading(context);
+      }
+      await _loadingCompleter?.future;
+      showAd(onDismissAd: onDismiss);
+      return;
+    }
+
+    if (_interstitialAd == null && mounted) {
       _isLoadingInterstitialAd = true;
+      _loadingCompleter = Completer<void>();
+      _isShowingDialog = true;
       showDialogLoading(context);
       InterstitialAd.load(
         adUnitId: interstitialUnitId,
         request: const AdRequest(),
         adLoadCallback: InterstitialAdLoadCallback(
           onAdLoaded: (InterstitialAd ad) {
+            _retryCount = 0;
             _interstitialAd = ad;
             hideInterstitialLoading();
             showAd(onDismissAd: onDismiss);
           },
           onAdFailedToLoad: (LoadAdError error) {
             hideInterstitialLoading();
-            loadAd();
+            if (_retryCount < 5) {
+              _retryCount++;
+              loadAd();
+            }
             onDismiss?.call();
           },
         ),
@@ -70,6 +96,11 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
   void hideInterstitialLoading() {
     if (_isLoadingInterstitialAd) {
       _isLoadingInterstitialAd = false;
+      _loadingCompleter?.complete();
+      _loadingCompleter = null;
+    }
+    if (_isShowingDialog && mounted) {
+      _isShowingDialog = false;
       Navigator.pop(context);
     }
   }
@@ -83,7 +114,6 @@ mixin InterstitialAdMixin<T extends StatefulWidget> on State<T>
       _interstitialAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdDismissedFullScreenContent: (InterstitialAd ad) {
           disposeAd();
-          loadAd();
           onDismissAd?.call();
         },
         onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {

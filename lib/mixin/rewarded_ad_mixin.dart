@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:tp_media/ads/admob_enable.dart';
@@ -8,8 +9,40 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
     implements AdmobEnable {
   RewardedAd? _rewardedAd;
   bool _isLoadingRewardedAd = false;
+  bool _isShowingDialog = false;
+  Completer<void>? _loadingCompleter;
+  int _retryCount = 0;
 
   abstract String rewardedUnitId;
+
+  void loadRewardAd() async {
+    if (!isEnableAd || await InternetManager.instance.isOnline == false) {
+      return;
+    }
+
+    if (!_isLoadingRewardedAd && _rewardedAd == null) {
+      _isLoadingRewardedAd = true;
+      _loadingCompleter = Completer<void>();
+      RewardedAd.load(
+        adUnitId: rewardedUnitId,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (RewardedAd ad) {
+            _retryCount = 0;
+            _rewardedAd = ad;
+            hideRewardedLoading();
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            hideRewardedLoading();
+            if (_retryCount < 5) {
+              _retryCount++;
+              loadRewardAd();
+            }
+          },
+        ),
+      );
+    }
+  }
 
   void loadAndShowRewardAd({
     Function(RewardItem)? onRewarded,
@@ -20,43 +53,58 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
       return;
     }
 
-    if (!mounted) {
+    if (_rewardedAd != null) {
+      showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
       return;
     }
 
-    _rewardedAd?.dispose();
-    _rewardedAd = null;
-    _isLoadingRewardedAd = true;
+    if (_isLoadingRewardedAd) {
+      if (!_isShowingDialog && mounted) {
+        _isShowingDialog = true;
+        showDialogLoading(context);
+      }
+      await _loadingCompleter?.future;
+      showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
+      return;
+    }
 
-    showDialogLoading(context);
+    if (_rewardedAd == null && mounted) {
+      _isLoadingRewardedAd = true;
+      _loadingCompleter = Completer<void>();
+      _isShowingDialog = true;
+      showDialogLoading(context);
 
-    RewardedAd.load(
-      adUnitId: rewardedUnitId,
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (RewardedAd ad) {
-          // Called when an ad is successfully received.
-          debugPrint('Ad was loaded.');
-          // Keep a reference to the ad so you can show it later.
-          _rewardedAd = ad;
-
-          hideRewardedLoading();
-          showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
-        },
-        onAdFailedToLoad: (LoadAdError error) {
-          // Called when an ad request failed.
-          debugPrint('Ad failed to load with error: $error');
-
-          hideRewardedLoading();
-          onDismiss?.call();
-        },
-      ),
-    );
+      RewardedAd.load(
+        adUnitId: rewardedUnitId,
+        request: const AdRequest(),
+        rewardedAdLoadCallback: RewardedAdLoadCallback(
+          onAdLoaded: (RewardedAd ad) {
+            _retryCount = 0;
+            _rewardedAd = ad;
+            hideRewardedLoading();
+            showRewardAd(onRewarded: onRewarded, onDismiss: onDismiss);
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            hideRewardedLoading();
+            if (_retryCount < 5) {
+              _retryCount++;
+              loadRewardAd();
+            }
+            onDismiss?.call();
+          },
+        ),
+      );
+    }
   }
 
   void hideRewardedLoading() {
     if (_isLoadingRewardedAd) {
       _isLoadingRewardedAd = false;
+      _loadingCompleter?.complete();
+      _loadingCompleter = null;
+    }
+    if (_isShowingDialog && mounted) {
+      _isShowingDialog = false;
       Navigator.pop(context);
     }
   }
@@ -72,17 +120,12 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
     if (_rewardedAd != null) {
       _rewardedAd?.fullScreenContentCallback = FullScreenContentCallback(
         onAdFailedToShowFullScreenContent: (ad, err) {
-          // Called when the ad failed to show full screen content.
-          debugPrint('Ad failed to show full screen content with error: $err');
-          // Dispose the ad here to free resources.
-          ad.dispose();
+          disposeAd();
+          loadRewardAd();
           onDismiss?.call();
         },
         onAdDismissedFullScreenContent: (ad) {
-          // Called when the ad dismissed full screen content.
-          debugPrint('Ad was dismissed.');
-          // Dispose the ad here to free resources.
-          ad.dispose();
+          disposeAd();
           onDismiss?.call();
         },
       );
@@ -92,14 +135,19 @@ mixin RewardedAdMixin<T extends StatefulWidget> on State<T>
         },
       );
     } else {
-      loadAndShowRewardAd();
+      loadRewardAd();
       onDismiss?.call();
     }
   }
 
+  void disposeAd() {
+    _rewardedAd?.dispose();
+    _rewardedAd = null;
+  }
+
   @override
   void dispose() {
-    _rewardedAd?.dispose();
+    disposeAd();
     super.dispose();
   }
 }

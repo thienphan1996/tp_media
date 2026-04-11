@@ -73,3 +73,7 @@
 ## 1.0.10
 
 * Add check connection flag to presentPaywall functions
+
+## 1.1.0
+
+* Optimize load ads

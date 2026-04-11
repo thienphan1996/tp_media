@@ -217,6 +217,7 @@ class _MyHomePageState extends LoadingDialogState<MyHomePage>
                           CommonTextButton(
                             text: 'Test',
                             onPressed: () {
+                              loadAd();
                               loadAndShowAd();
                             },
                           ),
