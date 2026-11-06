@@ -12,13 +12,13 @@ A comprehensive Flutter utility package providing fast AdMob ad integration, in-
 ## ✨ Features
 
 ### 🎬 AdMob Integration
-- **`AdmobBannerAd`**: Responsive, orientation-aware banner ads with automatic reload and internet connectivity checks. Test mode support for iOS screenshots.
+- **`AdmobBannerAd`**: Adaptive banners sized to their container, reused until their configuration changes. Failed loads recover with bounded retries and network reconnection; loaded ads use AdMob's refresh settings. Screenshot mode displays a local image without requesting ads.
 - **`AdmobOpenAd`**: App open ad display for launch and resume scenarios.
 - **`InterstitialAdMixin`**: Mixin for seamless interstitial ad loading and display with callbacks.
 - **`RewardedAdMixin`**: Mixin for rewarded ad integration with reward callbacks.
 - **`AdmobInitializer`**: One-call initialization for Google Mobile Ads SDK.
 - **`TrackingTransparencyDialog`**: iOS-native ATT (App Tracking Transparency) permission dialog.
-- **Internet-aware loading**: Ads don't load when offline, saving bandwidth.
+- **Internet-aware loading**: Fullscreen and native ads check connectivity before loading. Banners avoid an initial connectivity probe and pause retries while offline.
 
 ### 💳 In-App Purchase (IAP) Management
 Powered by RevenueCat for cross-platform purchase handling:
@@ -107,7 +107,7 @@ Production-ready widgets for rapid development:
 ## 📦 Dependencies
 
 This package relies on:
-- `google_mobile_ads`: ^6.0.0 — Google AdMob SDK
+- `google_mobile_ads`: ^9.2.0 — Google AdMob SDK with Android Next-Gen support
 - `purchases_flutter`: ^9.8.0 — RevenueCat IAP SDK
 - `purchases_ui_flutter`: ^9.8.0 — RevenueCat Paywall UI
 - `app_tracking_transparency`: ^2.0.6+1 — iOS ATT dialog
@@ -125,7 +125,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  tp_media: ^1.0.3
+  tp_media: ^2.0.0
 ```
 
 Then run:
@@ -144,15 +144,70 @@ import 'package:tp_media/tp_media.dart';
 
 ### AdMob Setup
 
+#### Android GMA Next-Gen SDK
+
+Requires Flutter **3.38.1+**, Dart **3.10.0+**, and Android `minSdk` **24+**.
+`tp_media` uses the official `google_mobile_ads`
+plugin for banner, native templates, interstitial, rewarded, and app-open ads.
+The resolved Android dependencies, including Lifecycle Compose 2.11.0,
+require `compileSdk` **37+** and Android Gradle Plugin **9.1+**. The example
+uses Android Gradle Plugin **9.1.1**, Gradle **9.3.1**, Kotlin
+**2.2.21**, and JDK **17**. Update older host build tools alongside the SDK.
+For AGP 9, Flutter recommends **3.44+** with the compatibility properties
+`android.builtInKotlin=false` and `android.newDsl=false` in
+`android/gradle.properties`; the example includes both. See the
+[Flutter AGP migration guide](https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers).
+
+Next-Gen is selected at build time by the **host app**. Every Android run,
+APK build, and app bundle build must include this flag, including CI builds:
+
+```bash
+flutter run --dart-define=USE_NEXT_GEN_SDK=true
+flutter build apk --dart-define=USE_NEXT_GEN_SDK=true
+flutter build appbundle --dart-define=USE_NEXT_GEN_SDK=true
+```
+
+Without the flag, the plugin selects the legacy Android SDK. A Dart package
+cannot set this flag for apps that depend on it. The repository's VS Code
+example launch already includes it. To run the example from a terminal:
+
+```bash
+cd example
+flutter pub get
+flutter run --dart-define=USE_NEXT_GEN_SDK=true
+```
+
+Keep the host app's AdMob application ID in `AndroidManifest.xml` under
+`com.google.android.gms.ads.APPLICATION_ID`; the Flutter plugin uses it for
+Next-Gen initialization too. Use your production app ID in your own app;
+the example contains Google's test app ID.
+
+The built-in `NativeTemplateStyle` integration needs no custom Android
+factory changes. Host apps with their own native factories or mediation
+adapters must also follow Google's
+[Next-Gen migration guide](https://developers.google.com/admob/flutter/android-next)
+for native imports, layouts, and compatible mediation dependencies.
+
+The Next-Gen switch applies to Android. iOS continues to use the Google
+Mobile Ads iOS SDK supplied by the plugin. After upgrading, run `pod install`
+in the host app's `ios` directory to update native dependencies.
+
 #### Initialize AdMob SDK
 
 ```dart
 import 'package:tp_media/tp_media.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await AdmobInitializer.init();
-  runApp(MyApp());
+// Call once from a mounted screen before loading ads.
+Future<void> initializeAds(BuildContext context) async {
+  await AdmobInitializer.init(
+    context,
+    buildTrackingTransparencyDialog(
+      context,
+      title: 'Personalized ads',
+      message: 'Allow tracking to help us show relevant ads.',
+      continueButton: 'Continue',
+    ),
+  );
 }
 ```
 

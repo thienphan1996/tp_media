@@ -7,8 +7,8 @@ plugins {
 
 android {
     namespace = "com.thienphan996.tpmedia.example"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = maxOf(37, flutter.compileSdkVersion)
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

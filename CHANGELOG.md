@@ -1,3 +1,22 @@
+## 2.0.0
+
+### Breaking changes
+
+* Require Flutter >=3.38.1 and Dart >=3.10.0; older SDKs can continue using tp_media 1.x.
+* Upgrade to google_mobile_ads 9.2.0. Android hosts must update their build tools for the resolved dependencies (compile SDK 37 and AGP 9.1+).
+* Enable Android Next-Gen builds with `--dart-define=USE_NEXT_GEN_SDK=true`; see README for Gradle and Flutter compatibility settings.
+
+### Improvements
+
+* Optimize banner loading: reuse unchanged configurations, use available layout width, cancel obsolete loads, and handle ad enable/disable and unit ID changes.
+* Retry initial banner failures with bounded backoff and recover on network reconnection or app resume; keep SDK-managed refresh for displayed ads.
+* Render banner screenshot mode immediately without requesting a real ad.
+* Migrate to `google_mobile_ads ^9.2.0` with Android GMA Next-Gen SDK support.
+* Configure the example launch for Next-Gen and document the required build flag for consuming apps.
+* Await ad request configuration before initializing Mobile Ads.
+* Use the current large adaptive banner API.
+* Update the example to compile SDK 37, Android Gradle Plugin 9.1.1, Gradle 9.3.1, and Kotlin 2.2.21 to satisfy resolved Lifecycle Compose dependencies.
+
 ## 0.0.1
 
 * Initial release.

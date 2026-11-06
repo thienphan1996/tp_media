@@ -1,0 +1,7 @@
+{
+    "dart.flutterSdkPath": "~/Source/Flutter/Development/flutter 3.41.4",
+    "dart.addSdkToTerminalPath": true,
+    "terminal.integrated.env.osx": {
+        "PATH": "${env:HOME}/Source/Flutter/Development/flutter 3.41.4/bin:${env:PATH}"
+    }
+}

@@ -1,33 +1,26 @@
-# example
+# tp_media example
 
-A Flutter plugin and example app for working with media (audio/video/images) across Android and iOS. This repository contains native Android code (Kotlin/Java), Flutter/Dart plugin code, Gradle build scripts, and an example Flutter app.
+Requires Dart 3.10.0+, Android SDK 37+, and JDK 17. Flutter 3.44+ is
+recommended for the example's AGP 9.1.1 configuration. The package itself
+requires Flutter 3.38.1+.
 
-## Features
+From this directory:
 
-- Cross-platform media utilities for Flutter
-- Android implementation in Kotlin/Java
-- Example Flutter app demonstrating usage
-- Built with Gradle and Flutter tooling
+```bash
+flutter pub get
+flutter run --dart-define=USE_NEXT_GEN_SDK=true
+flutter build apk --debug --dart-define=USE_NEXT_GEN_SDK=true
+flutter build appbundle --dart-define=USE_NEXT_GEN_SDK=true
+```
 
-## Getting started
+The repository's VS Code launch configuration includes the Next-Gen flag.
+Include it in Android Studio run arguments and CI build commands too.
+Omitting it selects the plugin's legacy Android SDK.
 
-1. Install Flutter: https://docs.flutter.dev/get-started/install
-2. From the repository root, get dependencies:
-   ```bash
-   flutter pub get# tp_media
-   
-   A Flutter plugin and example app for working with media (audio/video/images) across Android and iOS. This repository contains native Android code (Kotlin/Java), Flutter/Dart plugin code, Gradle build scripts, and an example Flutter app.
-   
-   ## Features
-   
-   - Cross-platform media utilities for Flutter
-   - Android implementation in Kotlin/Java
-   - Example Flutter app demonstrating usage
-   - Built with Gradle and Flutter tooling
-   
-   ## Getting started
-   
-   1. Install Flutter: https://docs.flutter.dev/get-started/install
-   2. From the repository root, get dependencies:
-      ```bash
-      flutter pub get
+The Android manifest and ad widgets use Google's test IDs. On a device,
+verify banner and native templates load, interstitial dismiss callbacks run,
+reward callbacks fire after earning a reward, and app-open ads load and show
+on foreground transitions.
+
+See the [package setup guide](../README.md#android-gma-next-gen-sdk) for host
+app configuration and mediation migration notes.

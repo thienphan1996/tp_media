@@ -43,7 +43,7 @@ class AdmobInitializer {
       }
     }
 
-    MobileAds.instance.updateRequestConfiguration(
+    await MobileAds.instance.updateRequestConfiguration(
       RequestConfiguration(testDeviceIds: testDeviceIds),
     );
 

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:tp_media/network/internet_manager.dart';
 
 class AdmobBannerAd extends StatefulWidget {
@@ -15,112 +18,239 @@ class AdmobBannerAd extends StatefulWidget {
 }
 
 class _AdmobBannerAdState extends State<AdmobBannerAd> {
-  BannerAd? _anchoredAdaptiveAd;
-  bool _isLoaded = false;
-  late Orientation _currentOrientation;
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _currentOrientation = MediaQuery.of(context).orientation;
-    _loadAd();
-  }
+  Widget build(BuildContext context) {
+    if (!widget.isEnableAd) return const SizedBox.shrink();
 
-  /// Load another ad, disposing of the current ad if there is one.
-  Future<void> _loadAd() async {
-    if (!widget.isEnableAd ||
-        await InternetManager.instance.isOnline == false) {
-      return;
-    }
+    final orientation = MediaQuery.orientationOf(context);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width =
+            (constraints.hasBoundedWidth
+                    ? constraints.maxWidth
+                    : MediaQuery.sizeOf(context).width)
+                .floor();
+        if (width <= 0) return const SizedBox.shrink();
 
-    if (!mounted) {
-      return;
-    }
-
-    final screenWidth = MediaQuery.of(context).size.width.truncate();
-    _anchoredAdaptiveAd?.dispose();
-
-    setState(() {
-      _anchoredAdaptiveAd = null;
-      _isLoaded = false;
-    });
-
-    final AnchoredAdaptiveBannerAdSize? size =
-        await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-          screenWidth,
-        );
-
-    if (size == null) {
-      return;
-    }
-
-    _anchoredAdaptiveAd = BannerAd(
-      adUnitId: widget.unitId,
-      size: size,
-      request: AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          setState(() {
-            _anchoredAdaptiveAd = ad as BannerAd;
-            _isLoaded = true;
-          });
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          ad.dispose();
-        },
-      ),
-    );
-    return _anchoredAdaptiveAd!.load();
-  }
-
-  /// Gets a widget containing the ad, if one is loaded.
-  ///
-  /// Returns an empty container if no ad is loaded, or the orientation
-  /// has changed. Also loads a new ad if the orientation changes.
-  Widget _getAdWidget() {
-    if (!widget.isEnableAd) {
-      return SizedBox.shrink();
-    }
-
-    return OrientationBuilder(
-      builder: (context, orientation) {
-        if (_currentOrientation == orientation &&
-            _anchoredAdaptiveAd != null &&
-            _isLoaded) {
-          return Container(
-            color: Colors.white,
-            width: _anchoredAdaptiveAd!.size.width.toDouble(),
-            height: _anchoredAdaptiveAd!.size.height.toDouble(),
-            child:
-                !AdmobBannerAd.isTestMode
-                    ? AdWidget(ad: _anchoredAdaptiveAd!)
-                    : Image.asset(
-                      'assets/tp_media_banner.png',
-                      package: 'tp_media',
-                      width: _anchoredAdaptiveAd!.size.width.toDouble(),
-                      height: _anchoredAdaptiveAd!.size.width.toDouble() / 7,
-                      fit: BoxFit.fill,
-                    ),
+        if (AdmobBannerAd.isTestMode) {
+          return Image.asset(
+            'assets/tp_media_banner.png',
+            package: 'tp_media',
+            width: width.toDouble(),
+            height: width / 7,
+            fit: BoxFit.fill,
           );
         }
-        // Reload the ad if the orientation changes.
-        if (_currentOrientation != orientation) {
-          _currentOrientation = orientation;
-          _loadAd();
-        }
-        return Container();
+
+        // A new configuration owns a new state. Disposing the old state also
+        // invalidates pending size lookups, callbacks, and retries.
+        return _AdaptiveBanner(
+          key: ValueKey((widget.unitId, width, orientation)),
+          unitId: widget.unitId,
+          width: width,
+          orientation: orientation,
+        );
       },
     );
+  }
+}
+
+class _AdaptiveBanner extends StatefulWidget {
+  const _AdaptiveBanner({
+    required this.unitId,
+    required this.width,
+    required this.orientation,
+    super.key,
+  });
+
+  final String unitId;
+  final int width;
+  final Orientation orientation;
+
+  @override
+  State<_AdaptiveBanner> createState() => _AdaptiveBannerState();
+}
+
+class _AdaptiveBannerState extends State<_AdaptiveBanner>
+    with WidgetsBindingObserver {
+  static const _maxRetries = 5;
+
+  BannerAd? _ad;
+  bool _isLoaded = false;
+  bool _isLoading = false;
+  int _retryCount = 0;
+  Timer? _retryTimer;
+  StreamSubscription<InternetStatus>? _connectionSubscription;
+  InternetStatus? _connectionStatus;
+
+  bool get _isInForeground {
+    final state = WidgetsBinding.instance.lifecycleState;
+    return state == null || state == AppLifecycleState.resumed;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    unawaited(_loadAd());
+  }
+
+  Future<void> _loadAd() async {
+    if (!mounted ||
+        _isLoading ||
+        _ad != null ||
+        !_isInForeground ||
+        _connectionStatus == InternetStatus.disconnected) {
+      return;
+    }
+
+    _retryTimer?.cancel();
+    _retryTimer = null;
+    _isLoading = true;
+    BannerAd? loadingAd;
+    try {
+      final size =
+          await AdSize.getLargeAnchoredAdaptiveBannerAdSizeWithOrientation(
+            widget.orientation,
+            widget.width,
+          );
+      if (!mounted) return;
+      if (size == null) {
+        _onLoadFailed(null, 'Adaptive banner size is unavailable.');
+        return;
+      }
+
+      loadingAd = BannerAd(
+        adUnitId: widget.unitId,
+        size: size,
+        request: const AdRequest(),
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            if (!mounted || !identical(ad, _ad)) return;
+            _retryTimer?.cancel();
+            _retryTimer = null;
+            _retryCount = 0;
+            _stopWatchingConnection();
+            setState(() {
+              _isLoading = false;
+              _isLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (ad, error) => _onLoadFailed(ad, error),
+        ),
+      );
+      _ad = loadingAd;
+      await loadingAd.load();
+    } catch (error) {
+      _onLoadFailed(loadingAd, error);
+    }
+  }
+
+  void _onLoadFailed(Ad? ad, Object error) {
+    if (!mounted || (ad != null && !identical(ad, _ad))) return;
+    debugPrint('BannerAd failed to load: $error');
+
+    // Keep a displayed banner alive so its SDK-managed refresh can recover.
+    if (_isLoaded) return;
+
+    _ad = null;
+    _isLoading = false;
+    if (ad != null) unawaited(ad.dispose());
+    _watchConnection();
+    _scheduleRetry();
+  }
+
+  void _scheduleRetry() {
+    if (!mounted ||
+        _isLoading ||
+        _ad != null ||
+        !_isInForeground ||
+        _retryTimer != null ||
+        _retryCount >= _maxRetries ||
+        _connectionStatus == InternetStatus.disconnected) {
+      return;
+    }
+
+    // Retry initial failures at 5, 10, 20, 40, and 80 seconds. Successfully
+    // loaded banners use AdMob's refresh settings instead of a local timer.
+    final delay = Duration(seconds: 5 * (1 << _retryCount));
+    _retryCount++;
+    _retryTimer = Timer(delay, () {
+      _retryTimer = null;
+      unawaited(_loadAd());
+    });
+  }
+
+  void _watchConnection() {
+    _connectionSubscription ??= InternetManager.instance.onStatusChange.listen((
+      status,
+    ) {
+      if (!mounted) return;
+      final previousStatus = _connectionStatus;
+      _connectionStatus = status;
+      if (status == InternetStatus.disconnected) {
+        _retryTimer?.cancel();
+        _retryTimer = null;
+      } else if (previousStatus == InternetStatus.disconnected) {
+        _retryCount = 0;
+        unawaited(_loadAd());
+      } else {
+        _scheduleRetry();
+      }
+    });
+  }
+
+  void _stopWatchingConnection() {
+    final subscription = _connectionSubscription;
+    _connectionSubscription = null;
+    _connectionStatus = null;
+    if (subscription != null) unawaited(subscription.cancel());
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (_ad == null && !_isLoading) {
+        _retryCount = 0;
+        unawaited(_loadAd());
+      }
+    } else {
+      _retryTimer?.cancel();
+      _retryTimer = null;
+    }
   }
 
   @override
   void dispose() {
-    _anchoredAdaptiveAd?.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+    _retryTimer?.cancel();
+    _stopWatchingConnection();
+    final ad = _ad;
+    _ad = null;
+    if (ad != null) {
+      if (_isLoaded) {
+        // Let the child AdWidget unregister its platform view before removing
+        // the ad from the plugin's instance manager.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          unawaited(ad.dispose());
+        });
+      } else {
+        unawaited(ad.dispose());
+      }
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.white, child: _getAdWidget());
+    final ad = _ad;
+    if (!_isLoaded || ad == null) return const SizedBox.shrink();
+
+    return Container(
+      color: Colors.white,
+      width: ad.size.width.toDouble(),
+      height: ad.size.height.toDouble(),
+      child: AdWidget(key: ValueKey(ad), ad: ad),
+    );
   }
 }
